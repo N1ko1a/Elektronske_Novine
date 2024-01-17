@@ -5,11 +5,12 @@ const Article = require("../models/article");
 //Getting all
 router.get("/", async (req, res) => {
   try {
-    let query = {};
+    let query = {}; // Objekat za upite
     if (req.query.category) {
-      query.category = req.query.category;
+      // ako je u get zahtevu naveden guery parametar onda radi ovaj kod ispod
+      query.category = req.query.category; // vrednost query zahteva se postavlja u query.category
     }
-    const articles = await Article.find(query);
+    const articles = await Article.find(query).sort([["date", -1]]); //ako nema query vrati sve sortirano od latest do najstarijeg, ako ima query onda vrati sve iz te kategorije isto sortirane
     //odgovaramo sa json
     res.json(articles);
   } catch (err) {
@@ -19,11 +20,12 @@ router.get("/", async (req, res) => {
 });
 //Getting one
 router.get("/:id", getArticles, (req, res) => {
-  res.json(res.article);
+  res.json(res.article); //vracamo sve za artikal koji ima ovaj id
 });
 //Creating one
 router.post("/", async (req, res) => {
   const article = new Article({
+    //creiramo novi artikal a on je u stvari objekat i popunjavamo mu elemente
     title: req.body.title,
     description: req.body.description,
     date: new Date(),
@@ -35,7 +37,7 @@ router.post("/", async (req, res) => {
   });
 
   try {
-    const newArticle = await article.save();
+    const newArticle = await article.save(); //Ovde sacuvamo artikal u bazu
     res.status(201).json(newArticle);
   } catch (err) {
     //400 znaci da korisnik nije lepo uneo podatke
@@ -45,10 +47,28 @@ router.post("/", async (req, res) => {
 //Updating one
 router.patch("/:id", getArticles, async (req, res) => {
   if (req.body.title != null) {
+    // ako se title razlikuje od nule onda updejtujemo
     res.article.title = req.body.title;
+    //uzimamo title iz article i zatim uzimamo title iz body get zahteva
   }
   if (req.body.description != null) {
+    // isto za description i sve ostalo
     res.article.description = req.body.description;
+  }
+  if (req.body.author != null) {
+    res.article.author = req.body.author;
+  }
+  if (req.body.image != null) {
+    res.article.image = req.body.image;
+  }
+  if (req.body.category != null) {
+    res.article.category = req.body.category;
+  }
+  if (req.body.url != null) {
+    res.article.url = req.body.url;
+  }
+  if (req.body.source != null) {
+    res.article.source = req.body.source;
   }
   try {
     const updateArticle = await res.article.save();
@@ -60,7 +80,7 @@ router.patch("/:id", getArticles, async (req, res) => {
 //Deleting one
 router.delete("/:id", getArticles, async (req, res) => {
   try {
-    await res.article.deleteOne();
+    await res.article.deleteOne(); // brisemo ceo article koji smo nasli u funkciji getArticle
     res.json({ message: "Deleted Subscriber" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -72,16 +92,18 @@ router.delete("/:id", getArticles, async (req, res) => {
 async function getArticles(req, res, next) {
   let article;
   try {
-    article = await Article.findById(req.params.id);
+    article = await Article.findById(req.params.id); //nalazimo artikal po id
     if (article == null) {
+      //proveravamo da li ga ima
       return res.status(404).json({ message: "Cannot find subscriber" });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 
+  // Ako je članak uspešno pronađen, postavljate ga kao svojstvo objekta res (odgovora). Ovo je korisno ako želite da podaci o članku budu dostupni u sledećem middleware-u ili ruti koji će biti pozvan nakon trenutnog middleware-a.
   res.article = article;
-  next();
+  next(); //nastavi dalje odakle si stao
 }
 
 // router.post("/add-to-database", async (req, res) => {
@@ -122,5 +144,4 @@ async function getArticles(req, res, next) {
 //     res.status(500).json({ error: "Internal Server Error" });
 //   }
 // });
-
 module.exports = router;
