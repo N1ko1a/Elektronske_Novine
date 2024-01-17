@@ -19,4 +19,7 @@ const newsRoutes = require("./routes/news"); //inportujemo news.js
 //localhost:3000/news/bilo_sta_posle
 app.use("/news", newsRoutes);
 
+const userRoutes = require("./routes/users");
+app.use("/user", userRoutes);
+
 app.listen(3000, () => console.log("Server started"));

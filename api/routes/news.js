@@ -81,7 +81,7 @@ router.patch("/:id", getArticles, async (req, res) => {
 router.delete("/:id", getArticles, async (req, res) => {
   try {
     await res.article.deleteOne(); // brisemo ceo article koji smo nasli u funkciji getArticle
-    res.json({ message: "Deleted Subscriber" });
+    res.json({ message: "Deleted Article" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -95,7 +95,7 @@ async function getArticles(req, res, next) {
     article = await Article.findById(req.params.id); //nalazimo artikal po id
     if (article == null) {
       //proveravamo da li ga ima
-      return res.status(404).json({ message: "Cannot find subscriber" });
+      return res.status(404).json({ message: "Cannot find article" });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
