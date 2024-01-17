@@ -5,7 +5,11 @@ const Article = require("../models/article");
 //Getting all
 router.get("/", async (req, res) => {
   try {
-    const articles = await Article.find();
+    let query = {};
+    if (req.query.category) {
+      query.category = req.query.category;
+    }
+    const articles = await Article.find(query);
     //odgovaramo sa json
     res.json(articles);
   } catch (err) {
@@ -22,6 +26,12 @@ router.post("/", async (req, res) => {
   const article = new Article({
     title: req.body.title,
     description: req.body.description,
+    date: new Date(),
+    author: req.body.author,
+    image: req.body.image,
+    category: req.body.category,
+    url: req.body.url,
+    source: req.body.source,
   });
 
   try {

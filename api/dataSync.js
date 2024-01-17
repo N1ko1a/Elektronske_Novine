@@ -5,35 +5,73 @@ async function syncDataToDatabase() {
   try {
     const apiKey = "0450336dc6ae7225ab04b12d5ccf784d"; // Replace with your actual API key
     const apiUrl = "http://api.mediastack.com/v1/news";
+    const pageSize = 10; // Set the number of items you want per page
+    const language = "en"; // Set the desired language code
+    const country = "rs"; // Set the desired country code
+    const date = "2024-01-01,2024-01-16";
 
-    const apiResponse = await axios.get(apiUrl, {
-      params: {
-        access_key: apiKey,
-        keywords: "tennis", // You can customize the query parameters based on your requirements
-        // Add more parameters as needed (sources, categories, countries, languages, etc.)
-      },
-    });
+    let currentPage = 1;
+    let currentItemCount = await Article.countDocuments();
+    console.log(currentItemCount);
 
-    if (apiResponse.status === 200) {
-      const apiData = apiResponse.data.data;
+    const savePromises = [];
 
-      // Create an array of promises for saving articles
-      const savePromises = apiData.map((item) => {
-        const article = new Article({
-          title: item.title,
-          description: item.description,
-        });
+    while (true) {
+      console.log("Current Page:", currentPage);
 
-        return article.save();
+      const apiResponse = await axios.get(apiUrl, {
+        params: {
+          access_key: apiKey,
+          limit: pageSize,
+          offset: (currentPage - 1) * pageSize,
+          language: language,
+          countries: country,
+          date: date,
+        },
       });
 
-      // Wait for all promises to resolve
-      await Promise.all(savePromises);
+      if (apiResponse.status === 200) {
+        const apiData = apiResponse.data.data;
 
-      console.log("Data sync to the database successful");
-    } else {
-      console.error("API Request Failed:", apiResponse.status);
+        for (const item of apiData) {
+          const existingArticle = await Article.findOne({ title: item.title });
+          if (!existingArticle) {
+            const article = new Article({
+              title: item.title,
+              description: item.description,
+              date: item.published_at,
+              author: item.author,
+              image: item.image,
+              category: item.category,
+              url: item.url,
+              source: item.source,
+            });
+            savePromises.push(article.save());
+            currentItemCount++;
+          }
+        }
+
+        const pageCount = apiResponse.data.pagination.count;
+        const totalCount = apiResponse.data.pagination.total;
+
+        console.log("Results count on current page:", pageCount);
+        console.log("Total count of results available:", totalCount);
+
+        if (pageCount < pageSize || currentItemCount >= 100) {
+          // Exit the loop if the page count is less than the page size or if we have reached the desired item count
+          break;
+        }
+
+        currentPage++;
+      } else {
+        console.error("API Request Failed: ", apiResponse.status);
+        break; // Exit the loop in case of API request failure
+      }
     }
+
+    // Wait for all promises to resolve
+    await Promise.all(savePromises);
+    console.log("Data sync to the database successful");
   } catch (err) {
     console.error("Error fetching and adding data from MediaStack API:", err);
   }
