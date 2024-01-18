@@ -51,3 +51,7 @@ next(); // Nastavite dalje sa izvršavanjem narednih middleware-a ili rute
 U ovom primeru, res.article sadrži informacije o članku koje su postavljene u prethodnom middleware-u (getArticles). Ovo omogućava deljenje podataka između različitih delova aplikacije koji se izvršavaju u okviru istog HTTP zahteva.
 
 Ova praksa omogućava modularnost i čistu organizaciju koda, čineći ga lakšim za održavanje. Takođe, omogućava vam da prenesete relevantne informacije kroz različite delove vaše aplikacije bez potrebe da ih svaki put prosleđujete kao parametre.
+
+#users.js
+Koristili smo paket validator za validaciju mejla i sifre
+Za enkripciju sifre koristili smo paker bcrypt

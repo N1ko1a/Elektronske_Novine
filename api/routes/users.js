@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
+const validator = require("validator");
 //get all
 router.get("/", async (req, res) => {
   try {
@@ -19,9 +20,26 @@ router.get("/:id", getUser, (req, res) => {
 
 //Creating one
 router.post("/", async (req, res) => {
+  //Validacija
+  if (
+    !req.body.Email ||
+    !req.body.Password ||
+    !req.body.FirstName ||
+    !req.body.LastName ||
+    !req.body.PasswordConfirmation
+  ) {
+    return res.status(400).json({ message: "Sva polja moraju biti popunjena" });
+  }
+  if (!validator.isEmail(req.body.Email)) {
+    return res.status(400).json({ message: "Neispravan email" });
+  }
+  if (!validator.isStrongPassword(req.body.Password)) {
+    return res.status(400).json({ message: "Sifra nije dovoljno jaka" });
+  }
   if (req.body.Password != req.body.PasswordConfirmation) {
     return res.status(400).json({ message: "Sifra se ne podudara" });
   }
+  //Enkripcija sifre
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.Password, salt);
 
@@ -51,6 +69,12 @@ router.patch("/:id", getUser, async (req, res) => {
     res.user.Email = req.body.Email;
   }
   if (req.body.Password != null) {
+    if (!validator.isStrongPassword(req.body.Password)) {
+      return res.status(400).json({ message: "Sifra nije dovoljno jaka" });
+    }
+    if (req.body.Password !== req.body.PasswordConfirmation) {
+      return res.status(400).json({ message: "Šifra se ne podudara" });
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.Password, salt);
     res.user.Password = hashedPassword;
