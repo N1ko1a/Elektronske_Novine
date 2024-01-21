@@ -7,14 +7,32 @@ router.get("/", async (req, res) => {
   try {
     let query = {}; // Objekat za upite
     if (req.query.category) {
-      // ako je u get zahtevu naveden guery parametar onda radi ovaj kod ispod
+      // ako je u get zahtevu naveden query parametar onda radi ovaj kod ispod
       query.category = req.query.category; // vrednost query zahteva se postavlja u query.category
     }
-    const articles = await Article.find(query).sort([["date", -1]]); //ako nema query vrati sve sortirano od latest do najstarijeg, ako ima query onda vrati sve iz te kategorije isto sortirane
-    //odgovaramo sa json
-    res.json(articles);
+    const page = req.query.page || 0;
+    const articlesPerPage = 10;
+
+    // Promenljiva za ukupan broj artikala
+    let totalArticles;
+
+    if (req.query.category) {
+      // Ako je naveden query parametar za kategoriju, računaj ukupan broj samo za tu kategoriju
+      totalArticles = await Article.countDocuments(query);
+    } else {
+      // Inače, računaj ukupan broj svih artikala
+      totalArticles = await Article.countDocuments();
+    }
+
+    const articles = await Article.find(query)
+      .skip(page * articlesPerPage)
+      .limit(articlesPerPage)
+      .sort([["date", -1]]);
+
+    // Odgovaramo sa json, uključujući ukupan broj artikala
+    res.json({ articles, totalArticles });
   } catch (err) {
-    //500 znaci da imamo neku gresku na serveru
+    // 500 znaci da imamo neku gresku na serveru
     res.status(500).json({ message: err.message });
   }
 });

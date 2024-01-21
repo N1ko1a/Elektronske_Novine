@@ -18,11 +18,12 @@ function ArticalDisplay() {
   const [itemCount, setItemCount] = useState(0);
   const itemsPerPage = 20;
   const pageCount = Math.ceil(itemCount / itemsPerPage);
+  console.log(artical);
 
   useEffect(() => {
     setIsLoading(true);
     const pageToFetch = currentPage + 1;
-    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&pageSize=${itemsPerPage}`;
+    const apiURL = `http://localhost:3000/news`;
     // const apiURL = `http://localhost:8080/games?page=${pageToFetch}&pageSize=${itemsPerPage}&search=${searchValue}&platform=${platformFilter}&store=${storeFilter}&genre=${
     //   genreFilterSearch || genreFilter
     // }&rating=${ratingFilter}&age=${selectedAge}&sort=${selectedSort}&sign=${sign}`;
@@ -32,14 +33,12 @@ function ArticalDisplay() {
       .then((data) => {
         const articalResults = data || []; // default to an empty array if results is undefine
         console.log(articalResults);
-        setItemCount(data.countToReturn);
-        console.log("Item Count: ", itemCount);
-        setArtical(articalResults);
+        setItemCount(articalResults.totalArticles);
+        setArtical(articalResults.articles);
         setIsLoading(false);
       })
       .catch((error) => {
         console.log("Error: Ne mogu da uzmem podatke", error);
-        // console.error("Error: ", error);
         setIsLoading(false);
       });
   }, [currentPage]);
