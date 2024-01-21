@@ -16,14 +16,14 @@ function ArticalDisplay() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
-  const itemsPerPage = 20;
+  const itemsPerPage = 12;
   const pageCount = Math.ceil(itemCount / itemsPerPage);
   console.log(artical);
 
   useEffect(() => {
     setIsLoading(true);
-    const pageToFetch = currentPage + 1;
-    const apiURL = `http://localhost:3000/news`;
+    const pageToFetch = currentPage;
+    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&articlesPerPage=${itemsPerPage}`;
     // const apiURL = `http://localhost:8080/games?page=${pageToFetch}&pageSize=${itemsPerPage}&search=${searchValue}&platform=${platformFilter}&store=${storeFilter}&genre=${
     //   genreFilterSearch || genreFilter
     // }&rating=${ratingFilter}&age=${selectedAge}&sort=${selectedSort}&sign=${sign}`;
@@ -47,22 +47,24 @@ function ArticalDisplay() {
     setCurrentPage(data.selected);
   };
   return (
-    <div>
-      <div className="grid xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 gap-10 mt-5 mr-20 ml-20 justify-center items-center overflow-hidden">
-        {isLoading
-          ? Array.from({ length: itemsPerPage }).map((_, index) => (
-              <LoadSkeleton key={index} />
-            ))
-          : artical.map((artical) => (
-              <Artical
-                key={artical.id}
-                id={artical.id}
-                image={artical.image}
-                title={artical.title}
-                description={artical.description}
-                date={artical.date}
-              />
-            ))}
+    <div className="min-h-screen flex flex-col items-center">
+      <div className="felx-1 max-w-fit mx-auto p-10">
+        <div className="grid grid-cols-1 gap-4  md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-10">
+          {isLoading
+            ? Array.from({ length: itemsPerPage }).map((_, index) => (
+                <LoadSkeleton key={index} />
+              ))
+            : artical.map((artical) => (
+                <Artical
+                  key={artical.id}
+                  id={artical.id}
+                  image={artical.image}
+                  title={artical.title}
+                  description={artical.description}
+                  date={artical.date}
+                />
+              ))}
+        </div>
       </div>
       <div className="flex justify-center items-center">
         <ReactPaginate

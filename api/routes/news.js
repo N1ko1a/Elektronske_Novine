@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
       query.category = req.query.category; // vrednost query zahteva se postavlja u query.category
     }
     const page = req.query.page || 0;
-    const articlesPerPage = 10;
+    const articlesPerPage = req.query.itemCount || 12;
 
     // Promenljiva za ukupan broj artikala
     let totalArticles;
