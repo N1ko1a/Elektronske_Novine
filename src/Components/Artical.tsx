@@ -1,15 +1,26 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CSSProperties } from "react";
-import image from "../assets/Cargo_Plane.png";
 
-function Artical() {
+type ArticalProp = {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  // category: string;
+  // url: string;
+  // source: string;
+  // author: string;
+};
+
+function Artical(props: ArticalProp) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // const navigate = useNavigate();
-  // const navigateToGame = () => {
-  //   navigate("Game", { state: { id: props.id } });
-  // };
+  const navigate = useNavigate();
+  const navigateToArtical = () => {
+    navigate("ArticalPrev", { state: { id: props.id } });
+  };
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
@@ -37,12 +48,11 @@ function Artical() {
   return (
     <button
       className="ml-20 flex flex-col justify-start items-center w-72 min-h-60 max-h-fit rounded-lg text-black bg-gray-100 hover:bg-gray-200 ease-in-out duration-500 hover:text-black"
-      // onClick={navigateToGame}
+      onClick={navigateToArtical}
     >
       <div style={imageContainerStyle}>
         <img
-          // src={props.background}
-          src={image}
+          src={props.image}
           alt="Game image"
           loading="lazy"
           style={imageStyle}
@@ -50,11 +60,8 @@ function Artical() {
         />
       </div>
       <div className="flex flex-col flex-wrap w-72 h-fit ml-5 mr-5 mt-2 font-bold items-start ">
-        {/* <h1 className="mr-2">{props.name}</h1> */}
-        <h1 className="">Test</h1>
-        <h1 className="ml-auto mr-2 text-sm">12.02.2023</h1>
-        {/* <span className="flex"> */}
-        {/* </span> */}
+        <h1 className="">{props.title}</h1>
+        <h1 className="ml-auto mr-2 text-sm">{props.date}</h1>
       </div>
     </button>
   );
