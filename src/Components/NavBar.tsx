@@ -10,29 +10,29 @@ function NavBar() {
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
       <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
-        The Newspaper
+        NOVOSTI
       </h1>
       <div className="flex flex-wrap justify-evenly w-fit border-b-2 border-black ">
         <button className="m-2 text-xs  hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          GENERAL
+          OPSTE
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          BUSINESS
+          BIZNIS
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          ENTERTAINMENT
+          ZABAVA
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          HEALTH
+          ZDRAVLJE
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          SCIENCE
+          NAUKA
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
-          SPORTS
+          SPORT
         </button>
         <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base  md:text-base md:hover:text-xl">
-          TECHNOLOGY
+          TEHNOLOGIJA
         </button>
       </div>
       <div className=" w700 flex justify-center ">
@@ -46,11 +46,11 @@ function NavBar() {
           />
         </div>
         <div className="">
-          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-20 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base">
-            Sign in
+          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base">
+            Registracija
           </button>
-          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-20 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base">
-            Sign up
+          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base">
+            Prijava
           </button>
         </div>
       </div>

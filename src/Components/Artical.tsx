@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSProperties } from "react";
+import slika from "../assets/vesti.jpeg";
 
 type ArticalProp = {
   id: number;
@@ -44,24 +45,36 @@ function Artical(props: ArticalProp) {
     filter: imageLoaded ? "none" : "blur(8px)",
     transition: "filter 0.5s ease-in-out",
   };
+  // Pretvaranje stringa datuma u JavaScript Date objekt
+  const dateObject = new Date(props.date);
 
+  const formattedDate = dateObject.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+
+  const formattedTime = dateObject.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return (
     <button
-      className=" flex flex-col justify-start items-center max-w-72 min-h-60 max-h-fit rounded-lg text-black bg-gray-100 hover:bg-gray-200 ease-in-out duration-500 hover:text-black"
+      className="flex flex-col justify-center items-center max-w-72 min-h-60 max-h-fit rounded-lg text-black bg-gray-100 hover:bg-gray-200 ease-in-out duration-500 hover:text-black"
       onClick={navigateToArtical}
     >
       <div style={imageContainerStyle}>
         <img
-          src={props.image}
-          alt="Game image"
+          src={props.image || slika}
+          alt="Autor nije prilozio sliku"
           loading="lazy"
           style={imageStyle}
           onLoad={handleImageLoad}
         />
       </div>
-      <div className="flex flex-col flex-wrap max-w-72 h-fit ml-5 mr-5 mt-2 font-bold items-start ">
+      <div className="grid row-2 content-between max-w-72 h-full ml-5 mr-5 mt-2 font-bold  ">
         <h1 className="">{props.title}</h1>
-        <h1 className="ml-auto mr-2 text-sm">{props.date}</h1>
+        <h1 className=" mr-2 text-sm justify-self-end ">{`${formattedDate} ${formattedTime}`}</h1>
       </div>
     </button>
   );
