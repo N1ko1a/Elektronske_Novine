@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Prijava from "./Prijava";
+import Registracija from "./Registracija";
 
 function NavBar() {
   const [search, setSearch] = useState("");
@@ -7,6 +9,24 @@ function NavBar() {
     const searchText = event.target.value;
     setSearch(searchText);
   };
+
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const openSignIn = () => {
+    setShowSignIn(!showSignIn);
+    setShowSignUp(false);
+  };
+  const openSignUp = () => {
+    setShowSignUp(!showSignUp);
+    setShowSignIn(false);
+  };
+  const toggleSignIn = (value: boolean) => {
+    setShowSignIn(value);
+  };
+  const toggleSignUp = (value: boolean) => {
+    setShowSignUp(value);
+  };
+
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
       <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
@@ -46,12 +66,20 @@ function NavBar() {
           />
         </div>
         <div className="">
-          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base">
+          <button
+            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
+            onClick={() => openSignUp()}
+          >
             Registracija
           </button>
-          <button className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base">
+          <button
+            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
+            onClick={() => openSignIn()}
+          >
             Prijava
           </button>
+          {showSignIn ? <Prijava toggleSignIn={toggleSignIn} /> : null}
+          {showSignUp ? <Registracija toggleSignUp={toggleSignUp} /> : null}
         </div>
       </div>
     </div>
