@@ -47,14 +47,14 @@ const Prijava = ({ toggleSignIn }) => {
 
   return (
     <div className="w-screen h-screen  fixed z-40  left-0">
-      <div className="bg-gray-300 w-96 h-96 mb-10 mx-auto my-auto  text-black rounded-3xl ">
+      <div className="bg-gray-300 w-96 h-fit mb-10 mx-auto my-auto  text-black rounded-3xl ">
         <div className="w-full h-5 mr-10 relative mb-5 ">
           <AiOutlineClose
             className="w-5 h-5 absolute top-8 right-5 hover:text-black  transition duration-500 ease-in-out cursor-pointer"
             onClick={() => handleClick()}
           />
         </div>
-        <div className="flex flex-col justify-center items-center mt-20">
+        <div className="flex flex-col justify-center items-center mt-16">
           <input
             type="text"
             placeholder="Email"
@@ -70,7 +70,7 @@ const Prijava = ({ toggleSignIn }) => {
             className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
           />
           <button
-            className=" w-2/5 h-10 mt-5  text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
+            className=" w-2/5 h-10 mt-5 mb-20  text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
             onClick={handleButtonClick}
           >
             Sign in

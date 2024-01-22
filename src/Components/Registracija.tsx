@@ -1,5 +1,5 @@
 import { AiOutlineClose } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Registracija = ({ toggleSignUp }) => {
   const [onClick, setOnClick] = useState(false);
@@ -7,10 +7,9 @@ const Registracija = ({ toggleSignUp }) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isValideEmail, setIsValideEmail] = useState(true);
-  const [errorMessageEmail, setErrorMessageEmail] = useState("");
-  const [isValidePassword, setIsValidePassword] = useState(true);
-  const [errorMessagePassword, setErrorMessagePassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleFirstName = (event) => {
     setFirstName(event.target.value);
@@ -24,49 +23,25 @@ const Registracija = ({ toggleSignUp }) => {
   const handlePassword = (event) => {
     setPassword(event.target.value);
   };
-  function password_validate(p) {
-    return (
-      /[A-Z]/.test(p) &&
-      /[0-9]/.test(p) &&
-      !/[aeiou]/.test(p) &&
-      /^[@#][A-Za-z0-9]{7,13}$/.test(p)
-    );
-  }
-  const emailRegex = /\S+@\S+\.\S+/;
-  const passwordRegex = /(?=.{7,13}$)(?=.*[A-Z])(?=.*\d)/;
+  const handlePasswordConfiramtion = (event) => {
+    setPasswordConfirmation(event.target.value);
+  };
+
   const handleButtonClick = async () => {
-    if (!emailRegex.test(email)) {
-      setIsValideEmail(false);
-      setErrorMessageEmail("Invalide email format");
-      return;
-    } else {
-      setIsValideEmail(true);
-    }
-    if (!passwordRegex.test(password)) {
-      setIsValidePassword(false);
-      setErrorMessagePassword(
-        "Password must contain at least one uppercase letter and one number",
-      );
-      return;
-    } else {
-      setIsValidePassword(true);
-    }
     try {
-      const response = await fetch(
-        `http://localhost:8080/users/${firstName}/${lastName}/${email}/${password}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
-          }),
+      const response = await fetch(`http://localhost:3000/user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          FirstName: firstName,
+          LastName: lastName,
+          Email: email,
+          Password: password,
+          PasswordConfirmation: passwordConfirmation,
+        }),
+      });
 
       if (response.ok) {
         console.log("Successfully registered");
@@ -74,28 +49,30 @@ const Registracija = ({ toggleSignUp }) => {
         setLastName("");
         setEmail("");
         setPassword("");
+        setPasswordConfirmation("");
+        setIsError(false);
+        setErrorMessage("");
       } else {
         // Handle error scenarios
-        console.error("Failed to submit data to the backend");
+        const errorData = await response.json();
+        const errorMessage = errorData.message || "An error occurred";
+        console.error(errorMessage);
+        setErrorMessage(errorMessage);
+        setIsError(true);
       }
     } catch (error) {
-      console.error("Error during fetch:", error);
+      console.error("An unexpected error occurred", error);
     }
   };
 
   const handleClick = () => {
     setOnClick(!onClick);
     toggleSignUp(onClick);
-    console.log(onClick);
   };
-  console.log("Ime: ", firstName);
-  console.log("Prezime: ", lastName);
-  console.log("Email: ", email);
-  console.log("Password: ", password);
 
   return (
     <div className="w-screen h-screen  fixed z-40  left-0  ">
-      <div className="  bg-gray-300 contras-50 w-96 h-96 mb-10 mx-auto my-auto text-white rounded-3xl ">
+      <div className="  bg-gray-300 contras-50 w-96 h450 mb-10 mx-auto my-auto text-black rounded-3xl ">
         <div className="w-full h-5 mr-10 relative mb-5 ">
           <AiOutlineClose
             className="w-5 h-5 absolute top-8 right-5 hover:text-black  transition duration-500 ease-in-out cursor-pointer"
@@ -132,14 +109,16 @@ const Registracija = ({ toggleSignUp }) => {
             onChange={handlePassword}
             className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
           />
-          {!isValideEmail && (
+          <input
+            type="text"
+            placeholder="Confirm Password"
+            value={passwordConfirmation}
+            onChange={handlePasswordConfiramtion}
+            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
+          />
+          {isError && (
             <p style={{ color: "red", textAlign: "center", margin: "0" }}>
-              {errorMessageEmail}
-            </p>
-          )}
-          {!isValidePassword && (
-            <p style={{ color: "red", textAlign: "center", margin: "0" }}>
-              {errorMessagePassword}
+              {errorMessage}
             </p>
           )}
           <button

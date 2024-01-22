@@ -1,9 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.w700 {
-  width: 700px;
-}
-.w550 {
-  width: 550px;
+.h450 {
+  height: 450px;
 }
