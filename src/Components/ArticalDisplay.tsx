@@ -4,7 +4,7 @@ import Artical from "./Artical";
 import ReactPaginate from "react-paginate";
 
 type ArticalType = {
-  id: number;
+  _id: number;
   title: string;
   description: string;
   image: string;
@@ -23,16 +23,12 @@ function ArticalDisplay() {
   useEffect(() => {
     setIsLoading(true);
     const pageToFetch = currentPage;
-    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&articlesPerPage=${itemsPerPage}`;
-    // const apiURL = `http://localhost:8080/games?page=${pageToFetch}&pageSize=${itemsPerPage}&search=${searchValue}&platform=${platformFilter}&store=${storeFilter}&genre=${
-    //   genreFilterSearch || genreFilter
-    // }&rating=${ratingFilter}&age=${selectedAge}&sort=${selectedSort}&sign=${sign}`;
+    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}`;
 
     fetch(apiURL)
       .then((res) => res.json())
       .then((data) => {
         const articalResults = data || []; // default to an empty array if results is undefine
-        console.log(articalResults);
         setItemCount(articalResults.totalArticles);
         setArtical(articalResults.articles);
         setIsLoading(false);
@@ -56,8 +52,8 @@ function ArticalDisplay() {
               ))
             : artical.map((artical) => (
                 <Artical
-                  key={artical.id}
-                  id={artical.id}
+                  key={artical._id}
+                  _id={artical._id}
                   image={artical.image}
                   title={artical.title}
                   description={artical.description}

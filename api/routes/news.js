@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     const articles = await Article.find(query)
       .skip(page * articlesPerPage)
       .limit(articlesPerPage)
-      .sort([["date", -1]]);
+      .sort({ date: -1, time: -1 });
 
     // Odgovaramo sa json, uključujući ukupan broj artikala
     res.json({ articles, totalArticles });

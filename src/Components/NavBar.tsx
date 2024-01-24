@@ -56,24 +56,24 @@ function NavBar() {
         </button>
       </div>
       <div className=" w700 flex justify-center ">
-        <div className="m-2">
+        <div className=" mb-2 mt-2 mr-2">
           <input
             type="text"
             placeholder="Search"
             value={search}
-            className="text-sm w-52 h-8 bg-gray-50 border-b-2 border-gray-600 rounded-xl  outline-none text-white pl-4 hover:bg-gray-200   transition duration-500 ease-in-out hover:text-black sm:w-64 sm:text-sm md:text-base"
+            className="text-sm w-48 h-8 bg-gray-50 border-b-2 border-gray-600 rounded-xl  outline-none text-black pl-4 hover:bg-gray-200   transition duration-500 ease-in-out hover:text-black sm:w-64 sm:text-sm md:text-base"
             onChange={handleInputChange} // Update search results as the user types
           />
         </div>
-        <div className="">
+        <div className="flex flex-row w-fit">
           <button
-            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
+            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
             onClick={() => openSignUp()}
           >
             Registracija
           </button>
           <button
-            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 m-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
+            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 ml-2 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
             onClick={() => openSignIn()}
           >
             Prijava

@@ -4,7 +4,7 @@ import { CSSProperties } from "react";
 import slika from "../assets/vesti.jpeg";
 
 type ArticalProp = {
-  id: number;
+  _id: number;
   title: string;
   description: string;
   date: string;
@@ -20,7 +20,7 @@ function Artical(props: ArticalProp) {
 
   const navigate = useNavigate();
   const navigateToArtical = () => {
-    navigate("ArticalPrev", { state: { id: props.id } });
+    navigate("ArticalPrev", { state: { _id: props._id } });
   };
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -72,7 +72,7 @@ function Artical(props: ArticalProp) {
           onLoad={handleImageLoad}
         />
       </div>
-      <div className="grid row-2 content-between max-w-72 h-full ml-5 mr-5 mt-2 font-bold  ">
+      <div className="grid row-2 content-between text-sm max-w-72 h-full ml-5 mr-5 mt-2 font-bold md:text-sm  ">
         <h1 className="">{props.title}</h1>
         <h1 className=" mr-2 text-sm justify-self-end ">{`${formattedDate} ${formattedTime}`}</h1>
       </div>

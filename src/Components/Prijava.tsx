@@ -46,8 +46,8 @@ const Prijava = ({ toggleSignIn }) => {
   };
 
   return (
-    <div className="w-screen h-screen  fixed z-40  left-0">
-      <div className="bg-gray-300 w-96 h-fit mb-10 mx-auto my-auto  text-black rounded-3xl ">
+    <div className="w-screen h-screen mt-20 fixed z-40  left-0">
+      <div className="bg-gray-300 w-80 md:w-96 h-fit mb-10 mx-auto my-auto  text-black rounded-3xl ">
         <div className="w-full h-5 mr-10 relative mb-5 ">
           <AiOutlineClose
             className="w-5 h-5 absolute top-8 right-5 hover:text-black  transition duration-500 ease-in-out cursor-pointer"

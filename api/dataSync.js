@@ -3,74 +3,136 @@ const Article = require("./models/article");
 
 async function syncDataToDatabase() {
   try {
-    const apiKey = "0450336dc6ae7225ab04b12d5ccf784d";
-    const apiUrl = "http://api.mediastack.com/v1/news";
-    const pageSize = 10; //Broj predmeta po strani
-    const language = "en"; // Jezik na koje ce vesti da budu
-    const country = "rs"; // Iz koje zemlje ce da poticu vesti
-    const date = "2024-01-01,2024-01-16"; // Vremenski opseg vesti
-
-    let currentPage = 1; // Treenutna stranica na kojoj se peginetion nalazi
-    let currentItemCount = await Article.countDocuments(); // Trenutan broj item-a koji se nalaze u bazi
+    const apiKey = "a4def157fa5f42c5b5f7cdf28ca49e30";
+    const apiUrl = "https://newsapi.org/v2/top-headlines";
+    const pageSize = 20;
+    const country = "us";
+    const date = "2024-01-01";
+    const dateto = "2024-01-02";
+    const sort = "publishedAt";
+    const categoryArray = [
+      "business",
+      "entertainment",
+      "general",
+      "health",
+      "science",
+      "sports",
+      "technology",
+    ];
+    let currentItemCount = await Article.countDocuments();
     console.log(currentItemCount);
 
-    const savePromises = [];
+    for (const category of categoryArray) {
+      const savePromises = [];
+      let currentPage = 1;
+      let totalPages = 1; // Set initial value
 
-    while (true) {
-      console.log("Current Page:", currentPage);
+      while (currentPage <= totalPages) {
+        console.log("Current Page:", currentPage);
 
+        const apiResponse = await axios.get(apiUrl, {
+          params: {
+            apiKey: apiKey,
+            pageSize: pageSize,
+            page: currentPage,
+            country: country,
+            category: category,
+          },
+        });
+
+        if (apiResponse.status === 200) {
+          const apiData = apiResponse.data.articles;
+
+          for (const item of apiData) {
+            const existingArticle = await Article.findOne({
+              title: item.title,
+            });
+            if (
+              !existingArticle &&
+              item.content != null &&
+              item.title != null
+            ) {
+              const article = new Article({
+                title: item.title,
+                description: item.description,
+                date: item.publishedAt,
+                author: item.author,
+                image: item.urlToImage,
+                category: category,
+                url: item.url,
+                content: item.content,
+              });
+              savePromises.push(article.save());
+              currentItemCount++;
+            }
+          }
+
+          totalPages = Math.ceil(apiResponse.data.totalResults / pageSize);
+          currentPage++;
+        } else {
+          console.error("API Request Failed: ", apiResponse.status);
+          break;
+        }
+      }
+
+      await Promise.all(savePromises);
+      console.log(
+        `Data sync for category ${category} to the database successful`,
+      );
+    }
+  } catch (err) {
+    console.error("Error fetching and adding data from News API:", err);
+  }
+}
+
+const updateContentFromApi = async () => {
+  try {
+    const apiKey = "a4def157fa5f42c5b5f7cdf28ca49e30";
+    const apiUrl = "https://newsapi.org/v2/everything";
+    const searchFields = "title,content";
+
+    // Fetch all articles from the database
+    const articles = await Article.find({}, "title");
+
+    for (const article of articles) {
       const apiResponse = await axios.get(apiUrl, {
         params: {
-          access_key: apiKey,
-          limit: pageSize, //zadajemo koliko ce da ima item-a po strani
-          offset: (currentPage - 1) * pageSize, //ovo preskace odredjen broj item-a koji mu zadajemo i onda uzima 10 novih item-a
-          language: language,
-          countries: country,
-          date: date,
+          apiKey: apiKey,
+          q: article.title,
+          searchIn: searchFields,
         },
       });
 
       if (apiResponse.status === 200) {
-        const apiData = apiResponse.data.data; // dva puta data zbog arhitekture podataka koji dobijamo od api-a
+        const apiData = apiResponse.data.articles;
 
-        for (const item of apiData) {
-          const existingArticle = await Article.findOne({ title: item.title }); // Trazimo artikal po title i proveravamo da li ga ima u bazi
-          if (!existingArticle) {
-            const article = new Article({
-              // Ako ga nema onda ubacujemo ceo item u bazu
-              title: item.title,
-              description: item.description,
-              date: item.published_at,
-              author: item.author,
-              image: item.image,
-              category: item.category,
-              url: item.url,
-              source: item.source,
-            });
-            savePromises.push(article.save()); // Ova linija dodaje artikal u bazu i ona je asihrona i vraca promise koji mi dodajemo u niz sa promisima
-            currentItemCount++;
-          }
+        if (apiData.length > 0) {
+          const updatedContent = apiData[0].content;
+
+          // Update content in the database
+          await Article.updateOne(
+            { title: article.title },
+            { content: updatedContent },
+          );
+
+          console.log(
+            `Content updated for article with title: ${article.title}`,
+          );
+        } else {
+          console.log(
+            `No match found for article with title: ${article.title}`,
+          );
         }
-
-        const pageCount = apiResponse.data.pagination.count; //Broj item-a na trenutnoj stranici
-        const totalCount = apiResponse.data.pagination.total; // Ukupan broj item-a na svim stranicama
-
-        console.log("Results count on current page:", pageCount);
-        console.log("Total count of results available:", totalCount);
-
-        currentPage++;
       } else {
         console.error("API Request Failed: ", apiResponse.status);
-        break; // Exit the loop in case of API request failure
+        break;
       }
     }
 
-    // Wait for all promises to resolve
-    await Promise.all(savePromises); //Ovde cekamo da se svi promisi rese da bih nastavili dalje
-    console.log("Data sync to the database successful");
+    console.log("Content update process complete.");
   } catch (err) {
-    console.error("Error fetching and adding data from MediaStack API:", err);
+    console.error("Error updating content from News API:", err);
   }
-}
+};
 
-module.exports = { syncDataToDatabase };
+module.exports = { syncDataToDatabase, updateContentFromApi };
