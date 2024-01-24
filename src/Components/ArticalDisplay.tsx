@@ -4,7 +4,7 @@ import Artical from "./Artical";
 import ReactPaginate from "react-paginate";
 
 type ArticalType = {
-  _id: number;
+  _id: string;
   title: string;
   description: string;
   image: string;
@@ -45,7 +45,7 @@ function ArticalDisplay() {
   return (
     <div className="min-h-screen flex flex-col items-center">
       <div className="felx-1 max-w-fit mx-auto p-10">
-        <div className="grid grid-cols-1 gap-4  md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-10">
+        <div className="grid grid-cols-1 gap-4  md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-14">
           {isLoading
             ? Array.from({ length: itemsPerPage }).map((_, index) => (
                 <LoadSkeleton key={index} />

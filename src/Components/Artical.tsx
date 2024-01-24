@@ -4,7 +4,7 @@ import { CSSProperties } from "react";
 import slika from "../assets/vesti.jpeg";
 
 type ArticalProp = {
-  _id: number;
+  _id: string;
   title: string;
   description: string;
   date: string;
@@ -20,7 +20,7 @@ function Artical(props: ArticalProp) {
 
   const navigate = useNavigate();
   const navigateToArtical = () => {
-    navigate("ArticalPrev", { state: { _id: props._id } });
+    navigate(`/ArticalPrev/${props._id}`);
   };
   const handleImageLoad = () => {
     setImageLoaded(true);

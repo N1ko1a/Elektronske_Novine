@@ -1,14 +1,15 @@
 import ArticalPage from "../Components/ArticalPage";
-import { useLocation } from "react-router-dom";
 import NavBar from "../Components/NavBar";
-
+import { useParams } from "react-router-dom";
 function ArticalPrev() {
-  const { _id } = useLocation().state;
+  const { id } = useParams();
+
+  console.log(id);
 
   return (
     <div>
       <NavBar />
-      <ArticalPage _id={_id} />
+      <ArticalPage _id={id} />
     </div>
   );
 }

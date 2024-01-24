@@ -7,17 +7,8 @@ import { CSSProperties } from "react";
 type ArticalPageProp = {
   _id: number;
 };
-// _id
-// title
-// description
-// date
-// image
-// category
-// url
-// source
-// author
 type Artical = {
-  _id: number;
+  _id: string;
   title: string;
   image: string;
   description: string;
@@ -32,7 +23,6 @@ function ArticalPage(props: ArticalPageProp) {
   const [artical, setArtical] = useState<Artical | null>(null); // Initialize as null
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
-
   const [articalDisplay, setArticalDisplay] = useState<Artical[]>([]);
   const [imageLoaded, setImageLoaded] = useState(false);
   useEffect(() => {
@@ -64,7 +54,6 @@ function ArticalPage(props: ArticalPageProp) {
         setIsLoadingDisplay(false);
       });
   }, []);
-
   const dateObject = artical ? new Date(artical.date) : null;
   const formattedDate = dateObject
     ? dateObject.toLocaleDateString("en-US", {
@@ -105,6 +94,10 @@ function ArticalPage(props: ArticalPageProp) {
     filter: imageLoaded ? "none" : "blur(8px)",
     transition: "filter 0.5s ease-in-out",
   };
+
+  const authorDisplay =
+    artical && artical.author !== null ? artical.author : "Unknown";
+
   return (
     <div className="min-h-screen min-w-screen flex flex-col items-center lg:flex-row">
       {isLoading ? (
@@ -112,7 +105,7 @@ function ArticalPage(props: ArticalPageProp) {
         <div>Loading...</div>
       ) : artical ? (
         // Render the article details if available
-        <div className="flex flex-col  h-fit w-screen md:ml-20 lg:ml-44 md:m-5 p-5 md:w-3/4 ease-in-out duration-300">
+        <div className="flex flex-col  h-fit w-screen md:ml-20 lg:ml-44 md:m-5 p-5 lg:w-3/4 ease-in-out duration-300">
           <div className="flex flex-wrap w-full h-fit text-5xl font-semibold">
             {artical.title}
           </div>
@@ -164,7 +157,7 @@ function ArticalPage(props: ArticalPageProp) {
               from repetition, injected humour, or non-characteristic words etc.
             </p>
           </div>
-          <div className="flex justify-end">Author: {artical.author}</div>
+          <div className="flex justify-end">Author: {authorDisplay}</div>
         </div>
       ) : (
         // Render an error message or handle the error case
