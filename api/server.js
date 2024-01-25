@@ -4,6 +4,8 @@ const cors = require("cors"); // Import the cors middleware
 const app = express();
 const mongoose = require("mongoose");
 const dataSync = require("./dataSync");
+const cookieParser = require("cookie-parser");
+
 // Povezivanje sa bazom
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
@@ -16,7 +18,7 @@ db.once("open", () => {
 
 // Konfigurisanje da server prima JSON
 app.use(express.json());
-
+app.use(cookieParser());
 // Enable CORS for all routes
 app.use(cors());
 

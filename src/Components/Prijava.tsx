@@ -5,9 +5,7 @@ const Prijava = ({ toggleSignIn }) => {
   const [onClick, setOnClick] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-  const [submitedValue, setSubmitedValue] = useState(null);
-  console.log(emailValue);
-
+  const [isToken, setIsToken] = useState(false);
   const handleClick = () => {
     setOnClick(!onClick);
     toggleSignIn(onClick);
@@ -19,32 +17,44 @@ const Prijava = ({ toggleSignIn }) => {
   const handlePassword = (event) => {
     setPasswordValue(event.target.value);
   };
-  //OVO TREBA DA SE POGLEDA NE ZNAM KAKO RADI I NIJE ZAVRSENO
   const handleButtonClick = async () => {
     try {
-      const response = await fetch("your-backend-endpoint", {
+      const response = await fetch("http://localhost:3000/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: emailValue,
-          password: passwordValue,
+          Email: emailValue,
+          Password: passwordValue,
         }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        setSubmitedValue(data.message); // Assuming your backend sends a message in response
+        console.log(data.message);
+
+        // Provera da li je token dostupan
+        if (data.authenticated && data.tokenAvailable) {
+          console.log("Token je dostupan");
+          setIsToken(true);
+          // Dodatne radnje koje želite izvršiti ako je token dostupan
+        } else {
+          console.log("Token nije dostupan");
+          setIsToken(false);
+          // Dodatne radnje koje želite izvršiti ako token nije dostupan
+        }
+
+        setEmailValue("");
+        setPasswordValue("");
       } else {
-        // Handle error scenarios
-        console.error("Failed to submit data to the backend");
+        console.error("Failed to log in:", data.message);
       }
     } catch (error) {
-      console.error("Error during fetch:", error);
+      console.error("An unexpected error occurred", error);
     }
   };
-
   return (
     <div className="w-screen h-screen mt-20 fixed z-40  left-0">
       <div className="bg-gray-300 w-80 md:w-96 h-fit mb-10 mx-auto my-auto  text-black rounded-3xl ">

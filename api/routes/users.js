@@ -3,6 +3,9 @@ const router = express.Router();
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 //get all
 router.get("/", async (req, res) => {
   try {
@@ -94,6 +97,39 @@ router.delete("/:id", getUser, async (req, res) => {
     res.json({ message: "Deleted User" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ Email: req.body.Email });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Authentication failed1", tokenAvailable: false });
+    }
+    const isPasswordValid = await bcrypt.compare(
+      req.body.Password,
+      user.Password,
+    );
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ message: "Authentication failed2", tokenAvailable: false });
+    }
+    const token = jwt.sign({ userId: user._id }, process.env.MY_SECRET, {
+      expiresIn: "1h",
+    });
+    // Postavljanje HTTP-only kolačića
+    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    // Slanje informacije o dostupnosti tokena u JSON odgovoru
+    res.json({
+      authenticated: true,
+      message: "uspesan token poslat",
+      tokenAvailable: true,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message, tokenAvailable: false });
   }
 });
 
