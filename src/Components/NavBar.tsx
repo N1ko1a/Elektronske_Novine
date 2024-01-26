@@ -2,6 +2,7 @@ import { useState } from "react";
 import Prijava from "./Prijava";
 import Registracija from "./Registracija";
 import Profil from "./Profil";
+import AddArtical from "./AddArtical";
 
 function NavBar() {
   const [search, setSearch] = useState("");
@@ -73,7 +74,10 @@ function NavBar() {
         </div>
         <div className="flex flex-row w-fit">
           {isToken ? (
-            <Profil />
+            <>
+              <AddArtical />
+              <Profil />
+            </>
           ) : (
             <>
               <button
