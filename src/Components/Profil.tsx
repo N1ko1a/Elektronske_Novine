@@ -1,17 +1,35 @@
 import { useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
 
-function Profil() {
+const Profil = ({ handleTokenLogut, name }) => {
   const [isMenu, setIsMenu] = useState(false);
-  const [onClick, setOnClick] = useState(false);
+  const [nameLog, setNameLog] = useState(name);
 
-  const handleClick = () => {
-    setOnClick(!onClick);
-    setIsMenu(onClick);
-  };
   const toggleMenu = () => {
     setIsMenu(!isMenu);
   };
+  const handleButtonClick = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/user/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data.message);
+        handleTokenLogut(false);
+      } else {
+        console.error("Failed to log in:", data.message);
+        handleTokenLogut(true);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
+  };
+
   return (
     <div className="flex flex-col  items-center">
       <button
@@ -19,7 +37,7 @@ function Profil() {
         onClick={toggleMenu}
       >
         <div className="mr-2">
-          <h1 className="text-sm ">Nikola</h1>
+          <h1 className="text-sm sm:text-sm md:text-base">{nameLog}</h1>
           {/* <p className="  text-xs text-gray-600">View profile</p> */}
         </div>
       </button>
@@ -30,7 +48,10 @@ function Profil() {
               <button className="w-20 h-8 m-1 border-b-2 border-gray-600 bg-white rounded-2xl hover:bg-gray-400 transition duration-500 ease-in-out ">
                 Settings
               </button>
-              <button className="w-20 h-8 m-1 border-b-2 border-gray-600 bg-white rounded-2xl hover:bg-gray-400 transition duration-500 ease-in-out">
+              <button
+                className="w-20 h-8 m-1 border-b-2 border-gray-600 bg-white rounded-2xl hover:bg-gray-400 transition duration-500 ease-in-out"
+                onClick={handleButtonClick}
+              >
                 Logout
               </button>
             </div>
@@ -39,6 +60,6 @@ function Profil() {
       ) : null}
     </div>
   );
-}
+};
 
 export default Profil;

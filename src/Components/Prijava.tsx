@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 
-const Prijava = ({ toggleSignIn, handleToken }) => {
+const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
   const [onClick, setOnClick] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
@@ -32,12 +32,13 @@ const Prijava = ({ toggleSignIn, handleToken }) => {
           Password: passwordValue,
         }),
       });
-
       const data = await response.json();
 
       if (response.ok) {
         console.log(data.message);
-
+        handleNameLog(data.userName);
+        //Da bih zatvorili prozor kada se prijavimo
+        toggleSignIn(false);
         // Provera da li je token dostupan
         if (data.authenticated && data.tokenAvailable) {
           console.log("Token je dostupan");

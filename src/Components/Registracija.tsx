@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
 
-const Registracija = ({ toggleSignUp }) => {
+const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
   const [onClick, setOnClick] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -10,6 +10,7 @@ const Registracija = ({ toggleSignUp }) => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [isToken, setIsToken] = useState(false);
 
   const handleFirstName = (event) => {
     setFirstName(event.target.value);
@@ -43,8 +44,23 @@ const Registracija = ({ toggleSignUp }) => {
         }),
       });
 
+      const data = await response.json();
       if (response.ok) {
         console.log("Successfully registered");
+        handleNameReg(data.userName);
+        //Da bih zatvorili prozor kada se registrujemo
+        toggleSignUp(false);
+        // Provera da li je token dostupan
+        if (data.authenticated && data.tokenAvailable) {
+          console.log("Token je dostupan");
+          setIsToken(true);
+          handleTokenReg(true);
+        } else {
+          console.log("Token nije dostupan");
+          setIsToken(false);
+          handleTokenReg(false);
+        }
+
         setFirstName("");
         setLastName("");
         setEmail("");

@@ -7,6 +7,8 @@ import AddArtical from "./AddArtical";
 function NavBar() {
   const [search, setSearch] = useState("");
   const [isToken, setIsToken] = useState(false);
+  const [nameLog, setIsNameLog] = useState("");
+  const [nameReg, setIsNameReg] = useState("");
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
@@ -29,11 +31,24 @@ function NavBar() {
     setShowSignUp(value);
   };
 
+  const handleNameLog = (newNameLog) => {
+    setIsNameLog(newNameLog);
+  };
+
+  const handleNameReg = (newNameReg) => {
+    setIsNameReg(newNameReg);
+  };
   const handleToken = (newIsToken) => {
     setIsToken(newIsToken);
   };
 
-  console.log("Test: ", isToken);
+  const handleTokenReg = (newIsTokenReg) => {
+    setIsToken(newIsTokenReg);
+  };
+  const handleTokenLogut = (newIsTokenLogout) => {
+    setIsToken(newIsTokenLogout);
+  };
+
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
       <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
@@ -76,7 +91,10 @@ function NavBar() {
           {isToken ? (
             <>
               <AddArtical />
-              <Profil />
+              <Profil
+                handleTokenLogut={handleTokenLogut}
+                name={nameLog || nameReg}
+              />
             </>
           ) : (
             <>
@@ -96,9 +114,16 @@ function NavBar() {
                 <Prijava
                   toggleSignIn={toggleSignIn}
                   handleToken={handleToken}
+                  handleNameLog={handleNameLog}
                 />
               ) : null}
-              {showSignUp ? <Registracija toggleSignUp={toggleSignUp} /> : null}
+              {showSignUp ? (
+                <Registracija
+                  toggleSignUp={toggleSignUp}
+                  handleTokenReg={handleTokenReg}
+                  handleNameReg={handleNameReg}
+                />
+              ) : null}
             </>
           )}
         </div>

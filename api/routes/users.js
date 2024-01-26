@@ -54,9 +54,20 @@ router.post("/", async (req, res) => {
   });
   try {
     const newUser = await user.save();
-    res.status(201).json(newUser);
+    const token = jwt.sign({ userId: newUser._id }, process.env.MY_SECRET, {
+      expiresIn: "1h",
+    });
+    // Postavljanje HTTP-only kolačića
+    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    // Slanje informacije o dostupnosti tokena u JSON odgovoru
+    res.json({
+      authenticated: true,
+      message: "uspesan token poslat",
+      tokenAvailable: true,
+      userName: newUser.FirstName,
+    });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: err.message, tokenAvailable: false });
   }
 });
 
@@ -127,12 +138,23 @@ router.post("/login", async (req, res) => {
       authenticated: true,
       message: "uspesan token poslat",
       tokenAvailable: true,
+      userName: user.FirstName,
     });
   } catch (err) {
     res.status(500).json({ message: err.message, tokenAvailable: false });
   }
 });
 
+// Dodajte ovaj deo koda gde definišete rute na svom serveru
+router.post("/logout", (req, res) => {
+  // Ovde obrišite HTTP-only kolačić
+  res.clearCookie("jwt");
+  res.json({
+    authenticated: true,
+    message: "Token uspesno obrisan",
+    tokenAvailable: false,
+  });
+});
 async function getUser(req, res, next) {
   let user;
   try {
