@@ -1,11 +1,14 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 
-const Prijava = ({ toggleSignIn }) => {
+const Prijava = ({ toggleSignIn, handleToken }) => {
   const [onClick, setOnClick] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [isToken, setIsToken] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleClick = () => {
     setOnClick(!onClick);
     toggleSignIn(onClick);
@@ -39,17 +42,22 @@ const Prijava = ({ toggleSignIn }) => {
         if (data.authenticated && data.tokenAvailable) {
           console.log("Token je dostupan");
           setIsToken(true);
+          handleToken(true);
           // Dodatne radnje koje želite izvršiti ako je token dostupan
         } else {
           console.log("Token nije dostupan");
           setIsToken(false);
+          handleToken(false);
           // Dodatne radnje koje želite izvršiti ako token nije dostupan
         }
-
         setEmailValue("");
         setPasswordValue("");
+        setIsError(false);
       } else {
         console.error("Failed to log in:", data.message);
+        setErrorMessage(data.message);
+
+        setIsError(true);
       }
     } catch (error) {
       console.error("An unexpected error occurred", error);
@@ -79,6 +87,11 @@ const Prijava = ({ toggleSignIn }) => {
             onChange={handlePassword}
             className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
           />
+          {isError ? (
+            <p style={{ color: "red", textAlign: "center", margin: "0" }}>
+              {errorMessage}
+            </p>
+          ) : null}
           <button
             className=" w-2/5 h-10 mt-5 mb-20  text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
             onClick={handleButtonClick}

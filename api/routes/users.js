@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .json({ message: "Authentication failed1", tokenAvailable: false });
+        .json({ message: "Authentication failed!", tokenAvailable: false });
     }
     const isPasswordValid = await bcrypt.compare(
       req.body.Password,
@@ -115,7 +115,7 @@ router.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       return res
         .status(401)
-        .json({ message: "Authentication failed2", tokenAvailable: false });
+        .json({ message: "Authentication failed!", tokenAvailable: false });
     }
     const token = jwt.sign({ userId: user._id }, process.env.MY_SECRET, {
       expiresIn: "1h",

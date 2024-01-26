@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Prijava from "./Prijava";
 import Registracija from "./Registracija";
+import Profil from "./Profil";
 
 function NavBar() {
   const [search, setSearch] = useState("");
-
+  const [isToken, setIsToken] = useState(false);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
@@ -27,6 +28,11 @@ function NavBar() {
     setShowSignUp(value);
   };
 
+  const handleToken = (newIsToken) => {
+    setIsToken(newIsToken);
+  };
+
+  console.log("Test: ", isToken);
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
       <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
@@ -66,20 +72,31 @@ function NavBar() {
           />
         </div>
         <div className="flex flex-row w-fit">
-          <button
-            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
-            onClick={() => openSignUp()}
-          >
-            Registracija
-          </button>
-          <button
-            className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 ml-2 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
-            onClick={() => openSignIn()}
-          >
-            Prijava
-          </button>
-          {showSignIn ? <Prijava toggleSignIn={toggleSignIn} /> : null}
-          {showSignUp ? <Registracija toggleSignUp={toggleSignUp} /> : null}
+          {isToken ? (
+            <Profil />
+          ) : (
+            <>
+              <button
+                className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
+                onClick={() => openSignUp()}
+              >
+                Registracija
+              </button>
+              <button
+                className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 ml-2 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
+                onClick={() => openSignIn()}
+              >
+                Prijava
+              </button>
+              {showSignIn ? (
+                <Prijava
+                  toggleSignIn={toggleSignIn}
+                  handleToken={handleToken}
+                />
+              ) : null}
+              {showSignUp ? <Registracija toggleSignUp={toggleSignUp} /> : null}
+            </>
+          )}
         </div>
       </div>
     </div>
