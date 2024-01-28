@@ -79,14 +79,14 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
             placeholder="Email"
             value={emailValue}
             onChange={handleEmail}
-            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
+            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
           />
           <input
             type="text"
             placeholder="Password"
             value={passwordValue}
             onChange={handlePassword}
-            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
+            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
           />
           {isError ? (
             <p style={{ color: "red", textAlign: "center", margin: "0" }}>
@@ -94,7 +94,7 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
             </p>
           ) : null}
           <button
-            className=" w-2/5 h-10 mt-5 mb-20  text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-400 transition duration-500 ease-in-out hover:text-black"
+            className=" w-2/5 h-10 mt-5 mb-20 border-b-2 border-gray-600 text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
             onClick={handleButtonClick}
           >
             Sign in
