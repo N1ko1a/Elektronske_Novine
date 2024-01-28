@@ -105,6 +105,93 @@ router.delete("/:id", getArticles, async (req, res) => {
   }
 });
 
+//like article
+router.post("/:id/like", getArticles, async (req, res) => {
+  try {
+    res.article.like++;
+    const updateArticle = await res.article.save();
+    res.json(updateArticle);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+//dislike article
+router.post("/:id/dislike", getArticles, async (req, res) => {
+  try {
+    res.article.dislike++;
+    const updateArticle = await res.article.save();
+    res.json(updateArticle);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Creating comment
+router.post("/:id/comment", getArticles, async (req, res) => {
+  const { user, content } = req.body;
+  try {
+    const comment = { user, content };
+    res.article.comments.push(comment); // Note the correct field name here
+    const updatedArticle = await res.article.save();
+    res.json(updatedArticle);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+//Like comment
+router.post(
+  "/:id/comment/:commentId/like",
+  getArticles,
+  getComment,
+  async (req, res) => {
+    try {
+      res.comment.like++;
+      const updateArticle = await res.article.save();
+      res.json(updateArticle);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+);
+
+//Dislike comment
+router.post(
+  "/:id/comment/:commentId/dislike",
+  getArticles,
+  getComment,
+  async (req, res) => {
+    try {
+      //posot vec imamo ceo objekat comment samo pristupamo elementu dislike
+      res.comment.dislike++;
+      //kada smo promenili element onda sacuvamo promene
+      const updateComment = await res.article.save();
+      res.json(updateComment);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+);
+
+// Find comment
+async function getComment(req, res, next) {
+  let comment;
+  try {
+    //Ulazimo u objekat article pa zatim u objekat comment i onda biramo element id
+    comment = res.article.comments.id(req.params.commentId); //vraca ceo objekat comment
+    //Ako bude naso bice true
+    if (!comment) {
+      return res.status(404).json({ message: "Cannot find comment" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  //res.comment postavljamo da bude objekat comment
+  res.comment = comment;
+  next();
+}
+
 //Koristicemo midelware, to je funkcija koja se ponavlja u http kodu
 //ova funkcija vraca article po id-u
 async function getArticles(req, res, next) {
@@ -123,43 +210,4 @@ async function getArticles(req, res, next) {
   res.article = article;
   next(); //nastavi dalje odakle si stao
 }
-
-// router.post("/add-to-database", async (req, res) => {
-//   try {
-//     const apiKey = "0450336dc6ae7225ab04b12d5ccf784d"; // Replace with your actual API key
-//     const apiUrl = "http://api.mediastack.com/v1/news";
-//
-//     const apiResponse = await axios.get(apiUrl, {
-//       params: {
-//         access_key: apiKey,
-//         keywords: "tennis", // You can customize the query parameters based on your requirements
-//         // Add more parameters as needed (sources, categories, countries, languages, etc.)
-//       },
-//     });
-//
-//     if (apiResponse.status === 200) {
-//       const apiData = apiResponse.data.data;
-//
-//       // Create an array of promises for saving articles
-//       const savePromises = apiData.map((item) => {
-//         const article = new Article({
-//           title: item.title,
-//           description: item.description,
-//         });
-//
-//         return article.save();
-//       });
-//
-//       // Wait for all promises to resolve before sending a response
-//       await Promise.all(savePromises);
-//
-//       res.json({ message: "Data added to the database successfully" });
-//     } else {
-//       res.status(apiResponse.status).json({ error: "API Request Failed" });
-//     }
-//   } catch (err) {
-//     console.error("Error fetching and adding data from MediaStack API:", err);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 module.exports = router;

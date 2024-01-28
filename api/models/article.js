@@ -28,6 +28,32 @@ const articleSchema = new mongoose.Schema({
   content: {
     type: String,
   },
+  like: {
+    type: Number,
+    default: 0,
+  },
+  dislike: {
+    type: Number,
+    default: 0,
+  },
+  comments: [
+    {
+      user: {
+        type: String,
+      },
+      content: {
+        type: String,
+      },
+      like: {
+        type: Number,
+        default: 0,
+      },
+      dislike: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Article", articleSchema);
