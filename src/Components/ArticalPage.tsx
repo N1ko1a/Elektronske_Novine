@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import LoadSkeleton from "./LoadSkeleton";
 import Artical from "./Artical";
 import slika from "../assets/vesti.jpeg";
@@ -176,7 +177,27 @@ function ArticalPage(props: ArticalPageProp) {
                 etc.
               </p>
             </div>
-            <div className="flex justify-end">Author: {authorDisplay}</div>
+            <div className="flex justify-between w-11/12 mb-2 mt-2">
+              <div className="flex w-fit">
+                <div className="flex w-fit mr-3 justify-center items-center">
+                  <p>{artical.like} </p>
+                  <button
+                    className="ml-1 mb-1  hover:text-xl "
+                    // onClick={() => handleLike(_id, comment._id)}
+                  >
+                    <AiOutlineLike />
+                  </button>
+                </div>
+                <div className="flex w-fit ml-3 justify-center items-center">
+                  <p>{artical.dislike} </p>
+                  <button className="ml-1  hover:text-xl">
+                    <AiOutlineDislike />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end">Author: {authorDisplay}</div>
+            </div>
           </div>
         ) : (
           // Render an error message or handle the error case
