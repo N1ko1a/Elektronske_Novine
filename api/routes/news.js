@@ -160,25 +160,32 @@ router.post(
       console.log("Comment ", typeof userId);
 
       // Check if the user has already liked the comment
-      if (!comment.like.includes(userId)) {
+      if (!comment.like.includes(userId) && !comment.dislike.includes(userId)) {
+        // User hasn't liked or disliked before
         comment.like.push(userId);
         console.log("comment: ", comment.like);
-
-        const updatedArticle = await res.article.save();
-
-        res.json({ message: "Comment liked successfully." });
+      } else if (comment.dislike.includes(userId)) {
+        // User has disliked before, remove from dislike and add to like
+        comment.dislike = comment.dislike.filter((id) => id !== userId);
+        comment.like.push(userId);
+        console.log("comment: ", comment.like);
       } else {
-        res
+        // User has already liked this comment
+        return res
           .status(400)
           .json({ message: "User has already liked this comment." });
       }
+
+      // Save the updated article
+      const updatedArticle = await res.article.save();
+
+      res.json({ message: "Comment liked successfully." });
     } catch (err) {
       console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   },
 );
-
 //Dislike comment
 router.post(
   "/:id/comment/:commentId/dislike",
@@ -191,22 +198,30 @@ router.post(
       const comment = res.comment;
 
       // Check if the user has already liked the comment
-      if (!comment.dislike.includes(userId)) {
+      if (!comment.dislike.includes(userId) && !comment.like.includes(userId)) {
+        // User hasn't liked or disliked before
         comment.dislike.push(userId);
-        const updatedArticle = await res.article.save();
-        res.json({ message: "Comment liked successfully." });
+      } else if (comment.like.includes(userId)) {
+        // User has disliked before, remove from dislike and add to like
+        comment.like = comment.like.filter((id) => id !== userId);
+        comment.dislike.push(userId);
       } else {
-        res
+        // User has already liked this comment
+        return res
           .status(400)
-          .json({ message: "User has already liked this comment." });
+          .json({ message: "User has already disliked this comment." });
       }
+
+      // Save the updated article
+      const updatedArticle = await res.article.save();
+
+      res.json({ message: "Comment disliked successfully." });
     } catch (err) {
       console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   },
 );
-
 // Find comment
 async function getComment(req, res, next) {
   let comment;
