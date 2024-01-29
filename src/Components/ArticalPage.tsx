@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import LoadSkeleton from "./LoadSkeleton";
 import Artical from "./Artical";
 import slika from "../assets/vesti.jpeg";
 import { CSSProperties } from "react";
 import Comment from "./Comment";
+import CommentsDisplay from "./CommentsDisplay";
 // import LoadingGame from "./LoadingGame";
 type ArticalPageProp = {
   _id: number;
@@ -26,11 +27,13 @@ function ArticalPage(props: ArticalPageProp) {
   const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
   const [articalDisplay, setArticalDisplay] = useState<Artical[]>([]);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [comments, setComments] = useState([]);
   useEffect(() => {
     fetch(`http://localhost:3000/news/${props._id}`)
       .then((res) => res.json())
       .then((data) => {
         setArtical(data);
+        setComments(data.comments);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -47,7 +50,6 @@ function ArticalPage(props: ArticalPageProp) {
       .then((res) => res.json())
       .then((data) => {
         setArticalDisplay(data.articles);
-        console.log(data);
         setIsLoadingDisplay(false);
       })
       .catch((error) => {
@@ -55,6 +57,19 @@ function ArticalPage(props: ArticalPageProp) {
         setIsLoadingDisplay(false);
       });
   }, []);
+  const refreshComments = useCallback(async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/news/${props._id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setComments(data.comments);
+      } else {
+        console.error("An error occurred while fetching comments");
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
+  }, [props._id]);
   const dateObject = artical ? new Date(artical.date) : null;
   const formattedDate = dateObject
     ? dateObject.toLocaleDateString("en-US", {
@@ -188,10 +203,15 @@ function ArticalPage(props: ArticalPageProp) {
           </div>
         </div>
       </div>
-      <div className="flex w-screen h-fit">
+      <div className="flex flex-col w-screen h-fit">
         <div className=" min-h-56 mb-5 mt-5 flex flex-col  h-fit w-screen  p-5 lg:w-4/6 lg:ml-44 ease-in-out duration-300">
-          <Comment />
+          <Comment _id={props._id} refreshComments={refreshComments} />
         </div>
+        {comments && comments.length ? (
+          <div className="min-h-56 mb-5 mt-5 flex flex-col  h-fit w-screen  p-5 lg:w-4/6 lg:ml-44 ease-in-out duration-300">
+            <CommentsDisplay comments={comments} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
