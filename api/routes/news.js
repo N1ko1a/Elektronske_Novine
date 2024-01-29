@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Article = require("../models/article");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const jwtMid = require("../middlewarw/authenticated");
 
 //Getting all
 router.get("/", async (req, res) => {
@@ -140,17 +143,37 @@ router.post("/:id/comment", getArticles, async (req, res) => {
   }
 });
 
-//Like comment
+// Like comment
 router.post(
   "/:id/comment/:commentId/like",
+  jwtMid.formHandler,
   getArticles,
   getComment,
   async (req, res) => {
     try {
-      res.comment.like++;
-      const updateArticle = await res.article.save();
-      res.json(updateArticle);
+      console.log("req.user:", req.user); // User ID
+      console.log("res.comment:", res.comment); // Article ID
+
+      const userId = req.params.id;
+      const comment = res.comment;
+
+      console.log("Comment ", typeof userId);
+
+      // Check if the user has already liked the comment
+      if (!comment.like.includes(userId)) {
+        comment.like.push(userId);
+        console.log("comment: ", comment.like);
+
+        const updatedArticle = await res.article.save();
+
+        res.json({ message: "Comment liked successfully." });
+      } else {
+        res
+          .status(400)
+          .json({ message: "User has already liked this comment." });
+      }
     } catch (err) {
+      console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   },
@@ -159,16 +182,26 @@ router.post(
 //Dislike comment
 router.post(
   "/:id/comment/:commentId/dislike",
+  jwtMid.formHandler,
   getArticles,
   getComment,
   async (req, res) => {
     try {
-      //posot vec imamo ceo objekat comment samo pristupamo elementu dislike
-      res.comment.dislike++;
-      //kada smo promenili element onda sacuvamo promene
-      const updateComment = await res.article.save();
-      res.json(updateComment);
+      const userId = req.params.id;
+      const comment = res.comment;
+
+      // Check if the user has already liked the comment
+      if (!comment.dislike.includes(userId)) {
+        comment.dislike.push(userId);
+        const updatedArticle = await res.article.save();
+        res.json({ message: "Comment liked successfully." });
+      } else {
+        res
+          .status(400)
+          .json({ message: "User has already liked this comment." });
+      }
     } catch (err) {
+      console.error("Error:", err);
       res.status(400).json({ message: err.message });
     }
   },
@@ -210,4 +243,5 @@ async function getArticles(req, res, next) {
   res.article = article;
   next(); //nastavi dalje odakle si stao
 }
+
 module.exports = router;

@@ -209,7 +209,7 @@ function ArticalPage(props: ArticalPageProp) {
         </div>
         {comments && comments.length ? (
           <div className="min-h-56 mb-5 mt-5 flex flex-col  h-fit w-screen  p-5 lg:w-4/6 lg:ml-44 ease-in-out duration-300">
-            <CommentsDisplay comments={comments} />
+            <CommentsDisplay comments={comments} _id={props._id} />
           </div>
         ) : null}
       </div>

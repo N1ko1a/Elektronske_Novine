@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const jwtMid = require("../middlewarw/authenticated");
 
 //get all
 router.get("/", async (req, res) => {
@@ -17,7 +18,11 @@ router.get("/", async (req, res) => {
 });
 
 //get one
-router.get("/:id", getUser, (req, res) => {
+router.get("/:id", jwtMid.formHandler, getUser, (req, res) => {
+  // Check if the authenticated user has the same ID as the requested user
+  if (req.user.userId !== req.params.id) {
+    return res.status(403).json({ message: "Unauthorized access" });
+  }
   res.json(res.user);
 });
 
@@ -168,5 +173,17 @@ async function getUser(req, res, next) {
   res.user = user;
   next();
 }
+
+// function cookieJwtAuth(req, res, next) {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
+//   if (token == null) return res.sendStatus(401);
+//
+//   jwt.verify(token, process.env.MY_SECRET, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     req.user = user;
+//     next();
+//   });
+// }
 
 module.exports = router;

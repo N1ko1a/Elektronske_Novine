@@ -45,12 +45,12 @@ const articleSchema = new mongoose.Schema({
         type: String,
       },
       like: {
-        type: Number,
-        default: 0,
+        type: [String], // Array of user IDs who liked the comment
+        default: [],
       },
       dislike: {
-        type: Number,
-        default: 0,
+        type: [String], // Array of user IDs who disliked the comment
+        default: [],
       },
     },
   ],

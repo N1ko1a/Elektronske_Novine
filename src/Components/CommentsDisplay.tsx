@@ -1,5 +1,39 @@
+import { useState } from "react";
 import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
-function CommentsDisplay({ comments }) {
+
+function CommentsDisplay({ comments, _id }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+  console.log(isLiked);
+  const handleLike = async (_id, commentsId) => {
+    try {
+      if (!isLiked) {
+        const response = await fetch(
+          `http://localhost:3000/news/${_id}/comment/${commentsId}/like`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // The browser will automatically include the cookie in the headers
+            },
+            body: JSON.stringify({}),
+            credentials: "include", // Include credentials (cookies) in the request
+          },
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log(data.message);
+          setIsLiked(true);
+        } else {
+          console.error("Failed to like the comment:", data.message);
+        }
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center rounded-xl bg-gray-300 w-full min-h-48 h-fit p-2">
       {comments.map((comment) => (
@@ -14,7 +48,10 @@ function CommentsDisplay({ comments }) {
             <div className="flex w-fit">
               <div className="flex w-fit mr-3 justify-center items-center">
                 <p>{comment.like} </p>
-                <button className="ml-1 mb-1  hover:text-xl ">
+                <button
+                  className="ml-1 mb-1  hover:text-xl "
+                  onClick={() => handleLike(_id, comment._id)}
+                >
                   <AiOutlineLike />
                 </button>
               </div>
