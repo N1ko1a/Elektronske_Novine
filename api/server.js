@@ -20,7 +20,16 @@ db.once("open", () => {
 app.use(express.json());
 app.use(cookieParser());
 // Enable CORS for all routes
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  }),
+);
 
 // Routes, logic for endpoints
 const newsRoutes = require("./routes/news");

@@ -27,6 +27,8 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
+
         body: JSON.stringify({
           Email: emailValue,
           Password: passwordValue,

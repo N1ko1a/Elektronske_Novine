@@ -35,6 +35,8 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
+
         body: JSON.stringify({
           FirstName: firstName,
           LastName: lastName,

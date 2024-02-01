@@ -26,7 +26,7 @@ router.get("/:id", jwtMid.formHandler, getUser, (req, res) => {
   res.json(res.user);
 });
 
-//Creating one
+//Registracija
 router.post("/", async (req, res) => {
   //Validacija
   if (
@@ -137,7 +137,11 @@ router.post("/login", async (req, res) => {
       expiresIn: "1h",
     });
     // Postavljanje HTTP-only kolačića
-    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, //mora da bude stranica https
+      maxAge: 3600000,
+    });
     // Slanje informacije o dostupnosti tokena u JSON odgovoru
     res.json({
       authenticated: true,

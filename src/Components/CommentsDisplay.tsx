@@ -1,34 +1,28 @@
 import { useState } from "react";
 import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
+import axios from "axios";
 
 function CommentsDisplay({ comments, _id }) {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
-  console.log(isLiked);
   const handleLike = async (_id, commentsId) => {
     try {
-      if (!isLiked) {
-        const response = await fetch(
-          `http://localhost:3000/news/${_id}/comment/${commentsId}/like`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              // The browser will automatically include the cookie in the headers
-            },
-            body: JSON.stringify({}),
-            credentials: "include", // Include credentials (cookies) in the request
+      const response = await fetch(
+        `http://localhost:3000/news/${_id}/comment/${commentsId}/like`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // The browser will automatically include the cookie in the headers
           },
-        );
+          credentials: "include",
+        },
+      );
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-          console.log(data.message);
-          setIsLiked(true);
-        } else {
-          console.error("Failed to like the comment:", data.message);
-        }
+      if (response.ok) {
+        console.log(data.message);
+      } else {
+        console.error("Failed to like the comment:", data.message);
       }
     } catch (error) {
       console.error("An unexpected error occurred", error);
