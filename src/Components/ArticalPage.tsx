@@ -29,6 +29,8 @@ function ArticalPage(props: ArticalPageProp) {
   const [articalDisplay, setArticalDisplay] = useState<Artical[]>([]);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [comments, setComments] = useState([]);
+  const [likedArtical, setLikedArtical] = useState(false);
+  const [dislikedArtical, setDislikedArtical] = useState(false);
   useEffect(() => {
     fetch(`http://localhost:3000/news/${props._id}`)
       .then((res) => res.json())
@@ -41,7 +43,7 @@ function ArticalPage(props: ArticalPageProp) {
         console.error("Error:", error);
         setIsLoading(false);
       });
-  }, [props]);
+  }, [props, likedArtical, dislikedArtical]);
   useEffect(() => {
     const pageToFetch = 0;
     const itemsPerPage = 4;
@@ -89,6 +91,60 @@ function ArticalPage(props: ArticalPageProp) {
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+  };
+
+  const handleLike = async (_id, articleId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/news/${props._id}/article/${articleId}/like`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // The browser will automatically include the cookie in the headers
+          },
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setLikedArtical(!likedArtical);
+
+        console.log(data.message);
+      } else {
+        console.error("Failed to like the article:", data.message);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
+  };
+  const handleDislike = async (_id, articleId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/news/${props._id}/article/${articleId}/dislike`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // The browser will automatically include the cookie in the headers
+          },
+          credentials: "include",
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setDislikedArtical(!dislikedArtical);
+        console.log(data.message);
+      } else {
+        console.error("Failed to dislike the article:", data.message);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
   };
 
   const imageContainerStyle: CSSProperties = {
@@ -180,17 +236,20 @@ function ArticalPage(props: ArticalPageProp) {
             <div className="flex justify-between w-11/12 mb-2 mt-2">
               <div className="flex w-fit">
                 <div className="flex w-fit mr-3 justify-center items-center">
-                  <p>{artical.like} </p>
+                  <p>{artical.like.length} </p>
                   <button
                     className="ml-1 mb-1  hover:text-xl "
-                    // onClick={() => handleLike(_id, comment._id)}
+                    onClick={() => handleLike(props._id, artical._id)}
                   >
                     <AiOutlineLike />
                   </button>
                 </div>
                 <div className="flex w-fit ml-3 justify-center items-center">
-                  <p>{artical.dislike} </p>
-                  <button className="ml-1  hover:text-xl">
+                  <p>{artical.dislike.length} </p>
+                  <button
+                    className="ml-1  hover:text-xl "
+                    onClick={() => handleDislike(props._id, artical._id)}
+                  >
                     <AiOutlineDislike />
                   </button>
                 </div>
@@ -230,7 +289,11 @@ function ArticalPage(props: ArticalPageProp) {
         </div>
         {comments && comments.length ? (
           <div className="min-h-56 mb-5 mt-5 flex flex-col  h-fit w-screen  p-5 lg:w-4/6 lg:ml-44 ease-in-out duration-300">
-            <CommentsDisplay comments={comments} _id={props._id} />
+            <CommentsDisplay
+              comments={comments}
+              _id={props._id}
+              refreshComments={refreshComments}
+            />
           </div>
         ) : null}
       </div>

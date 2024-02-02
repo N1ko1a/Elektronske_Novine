@@ -109,27 +109,83 @@ router.delete("/:id", getArticles, async (req, res) => {
 });
 
 //like article
-router.post("/:id/like", getArticles, async (req, res) => {
-  try {
-    res.article.like++;
-    const updateArticle = await res.article.save();
-    res.json(updateArticle);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+router.post(
+  "/:userid/article/:id/like",
+  jwtMid.formHandler,
+  getArticles,
+  async (req, res) => {
+    try {
+      const userId = req.params.userid;
+      const article = res.article;
+      console.log("User", userId);
+      console.log("Article", article);
 
+      // Check if the user has already liked the comment
+      if (!article.like.includes(userId) && !article.dislike.includes(userId)) {
+        // User hasn't liked or disliked before
+        article.like.push(userId);
+        console.log("article: ", article.like);
+      } else if (article.dislike.includes(userId)) {
+        // User has disliked before, remove from dislike and add to like
+        article.dislike = article.dislike.filter((id) => id !== userId);
+        article.like.push(userId);
+        console.log("article: ", article.like);
+      } else {
+        // User has already liked this comment
+        return res
+          .status(400)
+          .json({ message: "User has already liked this article." });
+      }
+
+      // Save the updated article
+      const updatedArticle = await res.article.save();
+
+      res.json({ message: "Article liked successfully." });
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(400).json({ message: err.message });
+    }
+  },
+);
 //dislike article
-router.post("/:id/dislike", getArticles, async (req, res) => {
-  try {
-    res.article.dislike++;
-    const updateArticle = await res.article.save();
-    res.json(updateArticle);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+router.post(
+  "/:userid/article/:id/dislike",
+  jwtMid.formHandler,
+  getArticles,
+  async (req, res) => {
+    try {
+      const userId = req.params.userid;
+      const article = res.article;
+      console.log("User", userId);
+      console.log("Article", article);
 
+      // Check if the user has already liked the comment
+      if (!article.dislike.includes(userId) && !article.like.includes(userId)) {
+        // User hasn't liked or disliked before
+        article.dislike.push(userId);
+        console.log("article: ", article.dislike);
+      } else if (article.like.includes(userId)) {
+        // User has disliked before, remove from dislike and add to like
+        article.like = article.like.filter((id) => id !== userId);
+        article.dislike.push(userId);
+        console.log("article: ", article.dislike);
+      } else {
+        // User has already liked this comment
+        return res
+          .status(400)
+          .json({ message: "User has already disliked this article." });
+      }
+
+      // Save the updated article
+      const updatedArticle = await res.article.save();
+
+      res.json({ message: "Article disliked successfully." });
+    } catch (err) {
+      console.error("Error:", err);
+      res.status(400).json({ message: err.message });
+    }
+  },
+);
 // Creating comment
 router.post("/:id/comment", getArticles, async (req, res) => {
   const { user, content } = req.body;
