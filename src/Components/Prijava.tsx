@@ -5,7 +5,6 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
   const [onClick, setOnClick] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-  const [isToken, setIsToken] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -38,18 +37,21 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
 
       if (response.ok) {
         console.log(data.message);
+        window.localStorage.setItem(
+          "Prijava_name",
+          JSON.stringify(data.userName),
+        );
         handleNameLog(data.userName);
         //Da bih zatvorili prozor kada se prijavimo
         toggleSignIn(false);
         // Provera da li je token dostupan
         if (data.authenticated && data.tokenAvailable) {
           console.log("Token je dostupan");
-          setIsToken(true);
+          window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(true));
           handleToken(true);
           // Dodatne radnje koje želite izvršiti ako je token dostupan
         } else {
           console.log("Token nije dostupan");
-          setIsToken(false);
           handleToken(false);
           // Dodatne radnje koje želite izvršiti ako token nije dostupan
         }

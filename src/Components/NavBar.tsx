@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Prijava from "./Prijava";
 import Registracija from "./Registracija";
 import Profil from "./Profil";
@@ -16,6 +16,15 @@ function NavBar() {
 
   const [showSignUp, setShowSignUp] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+
+  useEffect(() => {
+    const data = window.localStorage.getItem("Prisustvo_Tokena");
+    if (data !== null) setIsToken(JSON.parse(data));
+
+    const name = window.localStorage.getItem("Prijava_name");
+    if (name !== null) setIsNameLog(JSON.parse(name));
+  }, [isToken, nameLog]);
+
   const openSignIn = () => {
     setShowSignIn(!showSignIn);
     setShowSignUp(false);
