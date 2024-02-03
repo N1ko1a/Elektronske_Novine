@@ -27,7 +27,7 @@ function ArticalDisplay({ page }) {
     const current = window.localStorage.getItem("Trenutna_strana");
     setCurrentPage(current);
     const pageToFetch = current;
-    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}`;
+    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}&category=${window.localStorage.getItem("Rublika")}`;
 
     fetch(apiURL)
       .then((res) => res.json())
