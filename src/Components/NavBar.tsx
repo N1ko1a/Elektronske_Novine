@@ -60,6 +60,13 @@ function NavBar({ handleNavPage }) {
     setIsToken(newIsTokenLogout);
   };
 
+  const buttonAll = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+    window.localStorage.setItem("Rublika", "");
+  };
+
   const buttonOpste = () => {
     setChange(!change);
     handleNavPage(change);
@@ -111,6 +118,13 @@ function NavBar({ handleNavPage }) {
         </h1>
       </Link>
       <div className="flex flex-wrap justify-evenly w-fit border-b-2 border-black ">
+        <button
+          className={`m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl ${window.localStorage.getItem("Rublika") == "" ? "font-bold" : "font-normal"}`}
+          onClick={buttonAll}
+        >
+          ALL
+        </button>
+
         <button
           className={`m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl ${window.localStorage.getItem("Rublika") == "general" ? "font-bold" : "font-normal"}`}
           onClick={buttonOpste}
