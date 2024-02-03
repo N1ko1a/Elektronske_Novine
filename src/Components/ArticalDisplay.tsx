@@ -11,18 +11,22 @@ type ArticalType = {
   date: string;
 };
 
-function ArticalDisplay() {
+function ArticalDisplay({ page }) {
   const [artical, setArtical] = useState<ArticalType[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
+  const [test, setTest] = useState(false);
   const itemsPerPage = 12;
   const pageCount = Math.ceil(itemCount / itemsPerPage);
   console.log(artical);
 
   useEffect(() => {
     setIsLoading(true);
-    const pageToFetch = currentPage;
+    setTest(page);
+    const current = window.localStorage.getItem("Trenutna_strana");
+    setCurrentPage(current);
+    const pageToFetch = current;
     const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}`;
 
     fetch(apiURL)
@@ -37,13 +41,14 @@ function ArticalDisplay() {
         console.log("Error: Ne mogu da uzmem podatke", error);
         setIsLoading(false);
       });
-  }, [currentPage]);
+  }, [currentPage, page]);
 
   const handlePageClick = (data: { selected: number }) => {
+    window.localStorage.setItem("Trenutna_strana", data.selected);
     setCurrentPage(data.selected);
   };
   return (
-    <div className="min-h-screen flex flex-col items-center">
+    <div className="min-h-screen w-screen flex flex-col items-center">
       <div className="felx-1 max-w-fit mx-auto p-10">
         <div className="grid grid-cols-1 gap-4  md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-14">
           {isLoading

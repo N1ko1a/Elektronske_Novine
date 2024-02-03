@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Prijava from "./Prijava";
 import Registracija from "./Registracija";
 import Profil from "./Profil";
 import AddArtical from "./AddArtical";
 
-function NavBar() {
+function NavBar({ handleNavPage }) {
   const [search, setSearch] = useState("");
   const [isToken, setIsToken] = useState(false);
   const [nameLog, setIsNameLog] = useState("");
   const [nameReg, setIsNameReg] = useState("");
+  const [change, setChange] = useState(false);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
@@ -58,31 +60,90 @@ function NavBar() {
     setIsToken(newIsTokenLogout);
   };
 
+  const buttonOpste = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonBiznis = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonZabava = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonZdravlje = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonNauka = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonSport = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+  const buttonTehnologija = () => {
+    setChange(!change);
+    handleNavPage(change);
+    window.localStorage.setItem("Trenutna_strana", 0);
+  };
+
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
-      <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
-        NOVOSTI
-      </h1>
+      <Link to="/">
+        <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
+          NOVOSTI
+        </h1>
+      </Link>
       <div className="flex flex-wrap justify-evenly w-fit border-b-2 border-black ">
-        <button className="m-2 text-xs  hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs  hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonOpste}
+        >
           OPSTE
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonBiznis}
+        >
           BIZNIS
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonZabava}
+        >
           ZABAVA
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonZdravlje}
+        >
           ZDRAVLJE
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonNauka}
+        >
           NAUKA
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl"
+          onClick={buttonSport}
+        >
           SPORT
         </button>
-        <button className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base  md:text-base md:hover:text-xl">
+        <button
+          className="m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base  md:text-base md:hover:text-xl"
+          onClick={buttonTehnologija}
+        >
           TEHNOLOGIJA
         </button>
       </div>
