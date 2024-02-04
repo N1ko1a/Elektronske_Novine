@@ -113,7 +113,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
 
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
-      <Link to="/">
+      <Link to="/" onClick={buttonAll}>
         <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
           The Newspaper
         </h1>
