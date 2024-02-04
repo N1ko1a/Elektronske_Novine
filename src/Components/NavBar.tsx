@@ -10,7 +10,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   const [isToken, setIsToken] = useState(false);
   const [nameLog, setIsNameLog] = useState("");
   const [nameReg, setIsNameReg] = useState("");
-  const [change, setChange] = useState(false);
+  const [change, setChange] = useState(true);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
@@ -62,15 +62,15 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   };
 
   const buttonAll = () => {
-    setChange(!change);
     handleNavPage(change);
+    setChange(!change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "");
   };
 
   const buttonOpste = () => {
-    setChange(!change);
     handleNavPage(change);
+    setChange(!change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "general");
   };
@@ -115,7 +115,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
     <div className="flex  flex-col justify-center items-center w-screen ">
       <Link to="/">
         <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
-          NOVOSTI
+          The Newspaper
         </h1>
       </Link>
       <div className="flex flex-wrap justify-evenly w-fit border-b-2 border-black ">
@@ -194,13 +194,13 @@ function NavBar({ handleNavPage, handleNavSearch }) {
                 className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out drop-shadow-2xl sm:text-sm md:text-base"
                 onClick={() => openSignUp()}
               >
-                Registracija
+                Sign Up
               </button>
               <button
                 className="text-sm bg-gray-50 border-b-2 border-gray-600 h-8 w-24 md:w-28 ml-2 mt-2 mb-2 rounded-xl hover:bg-gray-200 transition duration-500 ease-in-out sm:text-sm md:text-base"
                 onClick={() => openSignIn()}
               >
-                Prijava
+                Sign In
               </button>
               {showSignIn ? (
                 <Prijava
