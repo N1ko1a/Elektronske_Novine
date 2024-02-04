@@ -11,7 +11,7 @@ type ArticalType = {
   date: string;
 };
 
-function ArticalDisplay({ page }) {
+function ArticalDisplay({ page, search }) {
   const [artical, setArtical] = useState<ArticalType[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +19,7 @@ function ArticalDisplay({ page }) {
   const [test, setTest] = useState(false);
   const itemsPerPage = 12;
   const pageCount = Math.ceil(itemCount / itemsPerPage);
-  console.log(artical);
+  console.log(search);
 
   useEffect(() => {
     setIsLoading(true);
@@ -27,7 +27,7 @@ function ArticalDisplay({ page }) {
     const current = window.localStorage.getItem("Trenutna_strana");
     setCurrentPage(current);
     const pageToFetch = current;
-    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}&category=${window.localStorage.getItem("Rublika")}`;
+    const apiURL = `http://localhost:3000/news?page=${pageToFetch}&itemCount=${itemsPerPage}&category=${window.localStorage.getItem("Rublika")}&title=${search}`;
 
     fetch(apiURL)
       .then((res) => res.json())
@@ -41,7 +41,7 @@ function ArticalDisplay({ page }) {
         console.log("Error: Ne mogu da uzmem podatke", error);
         setIsLoading(false);
       });
-  }, [currentPage, page]);
+  }, [currentPage, page, search]);
 
   const handlePageClick = (data: { selected: number }) => {
     window.localStorage.setItem("Trenutna_strana", data.selected);

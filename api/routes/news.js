@@ -13,13 +13,16 @@ router.get("/", async (req, res) => {
       // ako je u get zahtevu naveden query parametar onda radi ovaj kod ispod
       query.category = req.query.category; // vrednost query zahteva se postavlja u query.category
     }
+    if (req.query.title) {
+      query.title = { $regex: req.query.title, $options: "i" };
+    }
     const page = req.query.page || 0;
     const articlesPerPage = req.query.itemCount || 12;
 
     // Promenljiva za ukupan broj artikala
     let totalArticles;
 
-    if (req.query.category) {
+    if (req.query.category || req.query.title) {
       // Ako je naveden query parametar za kategoriju, računaj ukupan broj samo za tu kategoriju
       totalArticles = await Article.countDocuments(query);
     } else {

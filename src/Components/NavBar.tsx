@@ -5,7 +5,7 @@ import Registracija from "./Registracija";
 import Profil from "./Profil";
 import AddArtical from "./AddArtical";
 
-function NavBar({ handleNavPage }) {
+function NavBar({ handleNavPage, handleNavSearch }) {
   const [search, setSearch] = useState("");
   const [isToken, setIsToken] = useState(false);
   const [nameLog, setIsNameLog] = useState("");
@@ -14,6 +14,7 @@ function NavBar({ handleNavPage }) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
+    handleNavSearch(searchText);
   };
 
   const [showSignUp, setShowSignUp] = useState(false);
