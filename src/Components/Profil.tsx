@@ -21,6 +21,8 @@ const Profil = ({ handleTokenLogut, name }) => {
       if (response.ok) {
         console.log(data.message);
         window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(false));
+        window.localStorage.setItem("Registracija_name", JSON.stringify(""));
+        window.localStorage.setItem("Prijava_name", JSON.stringify(""));
         handleTokenLogut(false);
       } else {
         console.error("Failed to log in:", data.message);

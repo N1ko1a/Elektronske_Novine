@@ -12,6 +12,16 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
   const [isError, setIsError] = useState(false);
   const [isToken, setIsToken] = useState(false);
 
+  const setTokenFalseAfterTimeout = () => {
+    setTimeout(() => {
+      // Postavi token na false nakon 1 sata (3600000 ms)
+      window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(false));
+
+      handleTokenReg(false);
+      console.log("Token postavljen na false nakon 1 minuta");
+    }, 3600000);
+  };
+
   const handleFirstName = (event) => {
     setFirstName(event.target.value);
   };
@@ -49,6 +59,10 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
       const data = await response.json();
       if (response.ok) {
         console.log("Successfully registered");
+        window.localStorage.setItem(
+          "Registracija_name",
+          JSON.stringify(data.userName),
+        );
         handleNameReg(data.userName);
         //Da bih zatvorili prozor kada se registrujemo
         toggleSignUp(false);
@@ -56,7 +70,9 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
         if (data.authenticated && data.tokenAvailable) {
           console.log("Token je dostupan");
           setIsToken(true);
+          window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(true));
           handleTokenReg(true);
+          setTokenFalseAfterTimeout();
         } else {
           console.log("Token nije dostupan");
           setIsToken(false);

@@ -4,13 +4,16 @@ import Prijava from "./Prijava";
 import Registracija from "./Registracija";
 import Profil from "./Profil";
 import AddArtical from "./AddArtical";
+import Approve from "./Approve";
 
 function NavBar({ handleNavPage, handleNavSearch }) {
   const [search, setSearch] = useState("");
   const [isToken, setIsToken] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [nameLog, setIsNameLog] = useState("");
   const [nameReg, setIsNameReg] = useState("");
   const [change, setChange] = useState(true);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
     setSearch(searchText);
@@ -25,8 +28,17 @@ function NavBar({ handleNavPage, handleNavSearch }) {
     if (data !== null) setIsToken(JSON.parse(data));
 
     const name = window.localStorage.getItem("Prijava_name");
-    if (name !== null) setIsNameLog(JSON.parse(name));
-  }, [isToken, nameLog]);
+    if (name !== null) {
+      setIsNameLog(JSON.parse(name));
+    }
+    const nameReg = window.localStorage.getItem("Registracija_name");
+    if (nameReg !== null) {
+      setIsNameReg(JSON.parse(nameReg));
+    }
+
+    const admin = window.localStorage.getItem("Admin");
+    if (admin !== null) setIsAdmin(JSON.parse(admin));
+  }, [isToken, nameReg, nameLog, isAdmin]);
 
   const openSignIn = () => {
     setShowSignIn(!showSignIn);
@@ -59,6 +71,10 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   };
   const handleTokenLogut = (newIsTokenLogout) => {
     setIsToken(newIsTokenLogout);
+  };
+
+  const handleAdmin = (newValue) => {
+    setIsAdmin(newValue);
   };
 
   const buttonAll = () => {
@@ -182,7 +198,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
         <div className="flex flex-row w-fit">
           {isToken ? (
             <>
-              <AddArtical />
+              {isAdmin ? <Approve /> : <AddArtical />}
               <Profil
                 handleTokenLogut={handleTokenLogut}
                 name={nameLog || nameReg}
@@ -207,6 +223,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
                   toggleSignIn={toggleSignIn}
                   handleToken={handleToken}
                   handleNameLog={handleNameLog}
+                  handleAdmin={handleAdmin}
                 />
               ) : null}
               {showSignUp ? (

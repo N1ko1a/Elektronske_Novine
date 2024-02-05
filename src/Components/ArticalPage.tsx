@@ -6,6 +6,8 @@ import slika from "../assets/vesti.jpeg";
 import { CSSProperties } from "react";
 import Comment from "./Comment";
 import CommentsDisplay from "./CommentsDisplay";
+import { useNavigate } from "react-router-dom";
+
 // import LoadingGame from "./LoadingGame";
 type ArticalPageProp = {
   _id: number;
@@ -21,8 +23,11 @@ type Artical = {
   source: string;
   author: string;
   content: string;
+  approved: boolean;
 };
 function ArticalPage(props: ArticalPageProp) {
+  const navigate = useNavigate();
+
   const [artical, setArtical] = useState<Artical | null>(null); // Initialize as null
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingDisplay, setIsLoadingDisplay] = useState(true);
@@ -91,6 +96,31 @@ function ArticalPage(props: ArticalPageProp) {
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+  };
+
+  const handleApproval = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/news/${props._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          approved: true,
+        }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Approved");
+        navigate(`/ApprovePage`);
+      } else {
+        console.error("Failed to approve:", data.message);
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
   };
 
   const handleLike = async (_id, articleId) => {
@@ -180,6 +210,18 @@ function ArticalPage(props: ArticalPageProp) {
         ) : artical ? (
           // Render the article details if available
           <div className="flex flex-col  h-fit w-screen  lg:ml-44  p-5 lg:w-3/4 ease-in-out duration-300">
+            <div>
+              {" "}
+              {artical.approved ? null : (
+                <button
+                  className=" w-40 h-10 mt-5 mb-2 border-b-2 border-gray-600 text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
+                  onClick={handleApproval}
+                >
+                  APPROVE
+                </button>
+              )}
+            </div>
+
             <div className="flex flex-wrap w-full h-fit text-5xl font-semibold">
               {artical.title}
             </div>

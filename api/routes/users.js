@@ -51,11 +51,14 @@ router.post("/", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(req.body.Password, salt);
 
+  const isAdmin = req.body.AdminCode === process.env.ADMIN_SECRET;
+
   const user = new User({
     FirstName: req.body.FirstName,
     LastName: req.body.LastName,
     Email: req.body.Email,
     Password: hashedPassword,
+    isAdmin,
   });
   try {
     const newUser = await user.save();
@@ -65,11 +68,13 @@ router.post("/", async (req, res) => {
     // Postavljanje HTTP-only kolačića
     res.cookie("jwt", token, { httpOnly: true, secure: false });
     // Slanje informacije o dostupnosti tokena u JSON odgovoru
+    console.log(isAdmin);
     res.json({
       authenticated: true,
       message: "uspesan token poslat",
       tokenAvailable: true,
       userName: newUser.FirstName,
+      isAdmin,
     });
   } catch (err) {
     res.status(400).json({ message: err.message, tokenAvailable: false });
@@ -134,7 +139,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Authentication failed!", tokenAvailable: false });
     }
     const token = jwt.sign({ userId: user._id }, process.env.MY_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1m",
     });
     // Postavljanje HTTP-only kolačića
     res.cookie("token", token, {
@@ -148,6 +153,7 @@ router.post("/login", async (req, res) => {
       message: "uspesan token poslat",
       tokenAvailable: true,
       userName: user.FirstName,
+      isAdmin: user.isAdmin,
     });
   } catch (err) {
     res.status(500).json({ message: err.message, tokenAvailable: false });

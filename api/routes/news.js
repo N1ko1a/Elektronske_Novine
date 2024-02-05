@@ -8,10 +8,15 @@ const jwtMid = require("../middlewarw/authenticated");
 //Getting all
 router.get("/", async (req, res) => {
   try {
-    let query = {}; // Objekat za upite
+    // let query = { approved: true }; // Objekat za upite
+    let query = {};
     if (req.query.category) {
       // ako je u get zahtevu naveden query parametar onda radi ovaj kod ispod
       query.category = req.query.category; // vrednost query zahteva se postavlja u query.category
+    }
+
+    if (req.query.approved) {
+      query.approved = req.query.approved;
     }
     if (req.query.title) {
       query.title = { $regex: req.query.title, $options: "i" };
@@ -22,7 +27,7 @@ router.get("/", async (req, res) => {
     // Promenljiva za ukupan broj artikala
     let totalArticles;
 
-    if (req.query.category || req.query.title) {
+    if (req.query.category || req.query.title || req.query.approved) {
       // Ako je naveden query parametar za kategoriju, računaj ukupan broj samo za tu kategoriju
       totalArticles = await Article.countDocuments(query);
     } else {
@@ -58,6 +63,7 @@ router.post("/", async (req, res) => {
     category: req.body.category,
     url: req.body.url,
     source: req.body.source,
+    approved: req.body.approved,
   });
 
   try {
@@ -93,6 +99,9 @@ router.patch("/:id", getArticles, async (req, res) => {
   }
   if (req.body.source != null) {
     res.article.source = req.body.source;
+  }
+  if (req.body.approved != null) {
+    res.article.approved = req.body.approved;
   }
   try {
     const updateArticle = await res.article.save();

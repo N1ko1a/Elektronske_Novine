@@ -1,12 +1,22 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 
-const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
+const Prijava = ({ toggleSignIn, handleToken, handleNameLog, handleAdmin }) => {
   const [onClick, setOnClick] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const setTokenFalseAfterTimeout = () => {
+    setTimeout(() => {
+      // Postavi token na false nakon 1 sata (3600000 ms)
+      window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(false));
+
+      handleToken(false);
+      console.log("Token postavljen na false nakon 1 minuta");
+    }, 3600000);
+  };
 
   const handleClick = () => {
     setOnClick(!onClick);
@@ -44,12 +54,14 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog }) => {
         handleNameLog(data.userName);
         //Da bih zatvorili prozor kada se prijavimo
         toggleSignIn(false);
+        window.localStorage.setItem("Admin", JSON.stringify(data.isAdmin));
+        handleAdmin(data.isAdmin);
         // Provera da li je token dostupan
         if (data.authenticated && data.tokenAvailable) {
           console.log("Token je dostupan");
           window.localStorage.setItem("Prisustvo_Tokena", JSON.stringify(true));
           handleToken(true);
-          // Dodatne radnje koje želite izvršiti ako je token dostupan
+          setTokenFalseAfterTimeout();
         } else {
           console.log("Token nije dostupan");
           handleToken(false);

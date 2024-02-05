@@ -28,6 +28,10 @@ const articleSchema = new mongoose.Schema({
   content: {
     type: String,
   },
+  approved: {
+    type: Boolean,
+    default: false, // Početno stanje: članak nije odobren
+  },
   like: {
     type: [String], // Array of user IDs who liked the comment
     default: [],
