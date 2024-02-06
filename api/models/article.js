@@ -11,7 +11,8 @@ const articleSchema = new mongoose.Schema({
     type: String,
   },
   image: {
-    type: String,
+    type: [String], // Array of user IDs who liked the comment
+    default: [],
   },
   category: {
     type: String,

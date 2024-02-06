@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Prijava from "./Prijava";
@@ -13,6 +14,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   const [nameLog, setIsNameLog] = useState("");
   const [nameReg, setIsNameReg] = useState("");
   const [change, setChange] = useState(true);
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchText = event.target.value;
@@ -78,10 +80,11 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   };
 
   const buttonAll = () => {
-    handleNavPage(change);
+    // handleNavPage(change);
     setChange(!change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "");
+    navigate(`/`);
   };
 
   const buttonOpste = () => {
@@ -129,11 +132,11 @@ function NavBar({ handleNavPage, handleNavSearch }) {
 
   return (
     <div className="flex  flex-col justify-center items-center w-screen ">
-      <Link to="/" onClick={buttonAll}>
+      <button onClick={buttonAll}>
         <h1 className=" flex  justify-center font-semibold font-serif ease-in-out duration-500 m-5 text-4xl sm:text-5xl  md:text-7xl">
           The Newspaper
         </h1>
-      </Link>
+      </button>
       <div className="flex flex-wrap justify-evenly w-fit border-b-2 border-black ">
         <button
           className={`m-2 text-xs hover:font-bold w-fit h-5 ease-in-out duration-500 sm:text-xs sm:m-3 sm:hover:text-base md:text-base md:hover:text-xl ${window.localStorage.getItem("Rublika") == "" ? "font-bold" : "font-normal"}`}

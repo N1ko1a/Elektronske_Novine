@@ -63,6 +63,7 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
           "Registracija_name",
           JSON.stringify(data.userName),
         );
+        window.localStorage.setItem("Admin", JSON.stringify(data.isAdmin));
         handleNameReg(data.userName);
         //Da bih zatvorili prozor kada se registrujemo
         toggleSignUp(false);
