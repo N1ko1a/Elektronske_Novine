@@ -91,6 +91,13 @@ router.patch("/:id", getUser, async (req, res) => {
   }
   if (req.body.Email != null) {
     res.user.Email = req.body.Email;
+    const existingUser = await User.findOne({ Email: req.body.Email });
+    if (existingUser && existingUser._id.toString() !== req.body.id) {
+      return res.status(400).json({ message: "Email vec postoji" });
+    }
+    if (!validator.isEmail(req.body.Email)) {
+      return res.status(400).json({ message: "Neispravan email" });
+    }
   }
   if (req.body.Password != null) {
     if (!validator.isStrongPassword(req.body.Password)) {
@@ -154,6 +161,7 @@ router.post("/login", async (req, res) => {
       tokenAvailable: true,
       userName: user.FirstName,
       isAdmin: user.isAdmin,
+      _id: user._id,
     });
   } catch (err) {
     res.status(500).json({ message: err.message, tokenAvailable: false });

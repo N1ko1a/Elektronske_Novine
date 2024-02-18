@@ -80,7 +80,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
   };
 
   const buttonAll = () => {
-    // handleNavPage(change);
+    handleNavPage(change);
     setChange(!change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "");

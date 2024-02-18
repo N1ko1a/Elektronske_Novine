@@ -55,6 +55,7 @@ const Prijava = ({ toggleSignIn, handleToken, handleNameLog, handleAdmin }) => {
         //Da bih zatvorili prozor kada se prijavimo
         toggleSignIn(false);
         window.localStorage.setItem("Admin", JSON.stringify(data.isAdmin));
+        window.localStorage.setItem("_id", JSON.stringify(data._id));
         handleAdmin(data.isAdmin);
         // Provera da li je token dostupan
         if (data.authenticated && data.tokenAvailable) {

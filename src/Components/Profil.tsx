@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Settings from "./Settings";
 
 const Profil = ({ handleTokenLogut, name }) => {
   const [isMenu, setIsMenu] = useState(false);
   const [nameLog, setNameLog] = useState(name);
-
+  const [openSettings, setOpenSettings] = useState(false);
+  const [changeSettings, setChangeSettings] = useState(false);
+  const handleClose = (value) => {
+    setOpenSettings(value);
+  };
+  const toggleSettings = () => {
+    setOpenSettings(!openSettings);
+    setIsMenu(false);
+  };
   const toggleMenu = () => {
     setIsMenu(!isMenu);
   };
@@ -32,6 +41,9 @@ const Profil = ({ handleTokenLogut, name }) => {
       console.error("An unexpected error occurred", error);
     }
   };
+  const handleChangeSettings = (value) => {
+    setChangeSettings(value);
+  };
 
   return (
     <div className="flex flex-col  items-center">
@@ -48,7 +60,10 @@ const Profil = ({ handleTokenLogut, name }) => {
         <div className="w-fit h-fit  justify-center items-center mt-14 fixed z-40">
           <div className=" flex justify-center items-center min-w-20 w-32 bg-gray-300 h-36 mb-10 mx-auto my-auto  text-black rounded-3xl ">
             <div className="flex flex-col justify-center items-center ">
-              <button className="w-20 h-8 m-1 border-b-2 border-gray-600 bg-white rounded-2xl hover:bg-gray-400 transition duration-500 ease-in-out ">
+              <button
+                className="w-20 h-8 m-1 border-b-2 border-gray-600 bg-white rounded-2xl hover:bg-gray-400 transition duration-500 ease-in-out "
+                onClick={toggleSettings}
+              >
                 Settings
               </button>
               <button
@@ -60,6 +75,12 @@ const Profil = ({ handleTokenLogut, name }) => {
             </div>
           </div>
         </div>
+      ) : null}
+      {openSettings ? (
+        <Settings
+          handleClose={handleClose}
+          handleChangeSettings={handleChangeSettings}
+        />
       ) : null}
     </div>
   );

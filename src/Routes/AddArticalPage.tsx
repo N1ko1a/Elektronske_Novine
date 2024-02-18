@@ -137,6 +137,9 @@ function AddArticalPage() {
     };
   }, [title, author, content, files, selectedCategory]);
 
+  const handleBack = () => {
+    navigate(`/`);
+  };
   return (
     <div className="flex flex-col justify-center items-center w-screen">
       <div className="w-screen h-fit">
@@ -245,12 +248,18 @@ function AddArticalPage() {
             className="flex w-full  sm:w-96 h-10 justify-self-start text-black rounded-xl bg-gray-50 border-b-2 border-gray-600 p-2 outline-none hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
           />
         </div>
-        <div className="flex flex-col justify-start w-11/12 mb-2 mt-2">
+        <div className="flex  justify-start w-11/12 mb-2 mt-2">
           <button
-            className=" w-36 h-10 mt-5 mb-20 border-b-2 border-gray-600 text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
+            className=" w-36 h-10 mt-5 mb-20 mr-2 border-b-2 border-gray-600 text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
             onClick={handleAddArtical}
           >
             Send Artical
+          </button>
+          <button
+            className=" w-36 h-10 mt-5 mb-20 border-b-2 border-gray-600 text-center rounded-2xl bg-gray-50 outline-none text-black  hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
+            onClick={handleBack}
+          >
+            Go Back
           </button>
         </div>
       </div>
