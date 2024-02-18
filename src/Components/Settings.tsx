@@ -1,7 +1,7 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { useState, useEffect } from "react";
 
-function Settings({ handleClose, handleChangeSettings }) {
+function Settings({ handleClose }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -9,7 +9,6 @@ function Settings({ handleClose, handleChangeSettings }) {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  const [change, setChange] = useState(false);
 
   const handleFirstName = (event) => {
     setFirstName(event.target.value);
@@ -55,6 +54,8 @@ function Settings({ handleClose, handleChangeSettings }) {
       if (response.ok) {
         console.log("Successfully updated");
         window.localStorage.setItem("Prijava_name", JSON.stringify(firstName));
+        //Refresh celu stranicu, ne mogu da trazim bolje resenje
+        window.location.reload(true);
         setFirstName("");
         setLastName("");
         setEmail("");
@@ -63,8 +64,6 @@ function Settings({ handleClose, handleChangeSettings }) {
         setErrorMessage("");
         setIsError(false);
         handleClose(false);
-        setChange(true);
-        handleChangeSettings(true);
       } else {
         // Handle error scenarios
         const errorData = await response.json();

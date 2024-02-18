@@ -33,6 +33,7 @@ function NavBar({ handleNavPage, handleNavSearch }) {
     if (name !== null) {
       setIsNameLog(JSON.parse(name));
     }
+    console.log(name);
     const nameReg = window.localStorage.getItem("Registracija_name");
     if (nameReg !== null) {
       setIsNameReg(JSON.parse(nameReg));

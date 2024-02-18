@@ -5,7 +5,7 @@ const Profil = ({ handleTokenLogut, name }) => {
   const [isMenu, setIsMenu] = useState(false);
   const [nameLog, setNameLog] = useState(name);
   const [openSettings, setOpenSettings] = useState(false);
-  const [changeSettings, setChangeSettings] = useState(false);
+
   const handleClose = (value) => {
     setOpenSettings(value);
   };
@@ -41,9 +41,6 @@ const Profil = ({ handleTokenLogut, name }) => {
       console.error("An unexpected error occurred", error);
     }
   };
-  const handleChangeSettings = (value) => {
-    setChangeSettings(value);
-  };
 
   return (
     <div className="flex flex-col  items-center">
@@ -76,12 +73,7 @@ const Profil = ({ handleTokenLogut, name }) => {
           </div>
         </div>
       ) : null}
-      {openSettings ? (
-        <Settings
-          handleClose={handleClose}
-          handleChangeSettings={handleChangeSettings}
-        />
-      ) : null}
+      {openSettings ? <Settings handleClose={handleClose} /> : null}
     </div>
   );
 };

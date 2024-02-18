@@ -11,6 +11,7 @@ function Home() {
   const handleNavSearch = (newValue) => {
     setSearch(newValue);
   };
+
   return (
     <div className="flex flex-col justify-center">
       <NavBar handleNavPage={handleNavPage} handleNavSearch={handleNavSearch} />
