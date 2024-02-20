@@ -4,6 +4,17 @@ const Article = require("../models/article");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const jwtMid = require("../middlewarw/authenticated");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "/home/nikola/Nikola/github/Elektronske_Novine/api/uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 //Getting all
 router.get("/", async (req, res) => {
@@ -290,6 +301,15 @@ router.post(
     }
   },
 );
+
+//Upload image
+router.post("/uploadImage", upload.single("file"), async (req, res) => {
+  try {
+    res.json(req.file);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 // Find comment
 async function getComment(req, res, next) {
   let comment;
