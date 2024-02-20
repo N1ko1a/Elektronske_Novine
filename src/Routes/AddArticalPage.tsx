@@ -9,6 +9,9 @@ function AddArticalPage() {
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
+  console.log("Files: ", files);
+  const [uploadFile, setUploadFile] = useState();
+  console.log("Upload File: ", uploadFile);
   const [categoryClick, setCategoryClick] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const category = [
@@ -28,19 +31,18 @@ function AddArticalPage() {
 
   const handleAddArtical = async () => {
     try {
-      // Send article data to the server
+      // Napravi FormData objekat
+      const formData = new FormData();
+      formData.set("title", title);
+      formData.set("author", author);
+      formData.set("content", content);
+      formData.set("category", selectedCategory);
+      formData.set("file", uploadFile);
+
+      // Pošalji podatke članka na server
       const response = await fetch(`http://localhost:3000/news`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: title,
-          author: author,
-          content: content,
-          image: files.map((file) => file.preview),
-          category: selectedCategory,
-        }),
+        body: formData,
       });
 
       const data = await response.json();
@@ -69,6 +71,8 @@ function AddArticalPage() {
 
   const handleImageChange = (e) => {
     const selectedFiles = e.target.files;
+    setUploadFile(selectedFiles[0]);
+    console.log(selectedFiles);
     const newFiles = Array.from(selectedFiles).map((file) => ({
       preview: URL.createObjectURL(file),
       base64: URL.createObjectURL(file),
@@ -138,6 +142,7 @@ function AddArticalPage() {
   }, [title, author, content, files, selectedCategory]);
 
   const handleBack = () => {
+    saveDraftForUser();
     navigate(`/`);
   };
   return (

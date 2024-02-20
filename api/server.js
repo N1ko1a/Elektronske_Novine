@@ -5,7 +5,6 @@ const app = express();
 const mongoose = require("mongoose");
 const dataSync = require("./dataSync");
 const cookieParser = require("cookie-parser");
-
 // Povezivanje sa bazom
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
@@ -20,7 +19,6 @@ db.once("open", () => {
 app.use(express.json());
 app.use(cookieParser());
 // Enable CORS for all routes
-
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:3000"],
@@ -30,6 +28,8 @@ app.use(
     optionsSuccessStatus: 204,
   }),
 );
+
+app.use("/uploads", express.static("uploads"));
 
 // Routes, logic for endpoints
 const newsRoutes = require("./routes/news");

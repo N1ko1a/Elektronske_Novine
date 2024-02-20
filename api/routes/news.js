@@ -62,26 +62,32 @@ router.get("/", async (req, res) => {
 router.get("/:id", getArticles, (req, res) => {
   res.json(res.article); //vracamo sve za artikal koji ima ovaj id
 });
-//Creating one
-router.post("/", async (req, res) => {
-  const article = new Article({
-    //creiramo novi artikal a on je u stvari objekat i popunjavamo mu elemente
-    title: req.body.title,
-    description: req.body.description,
-    date: new Date(),
-    author: req.body.author,
-    image: req.body.image,
-    category: req.body.category,
-    url: req.body.url,
-    source: req.body.source,
-    approved: req.body.approved,
-  });
-
+// Upload image and create article
+router.post("/", upload.single("file"), async (req, res) => {
   try {
-    const newArticle = await article.save(); //Ovde sacuvamo artikal u bazu
+    // Ako postoji req.file (uploadovana slika)
+    let imageUrl;
+    if (req.file) {
+      console.log(req.file);
+      imageUrl = `http://localhost:3000/uploads/${req.file.originalname}`;
+    }
+
+    const article = new Article({
+      title: req.body.title,
+      description: req.body.description,
+      date: new Date(),
+      author: req.body.author,
+      image: imageUrl,
+      category: req.body.category,
+      url: req.body.url,
+      source: req.body.source,
+      approved: req.body.approved,
+    });
+
+    const newArticle = await article.save(); // Čuvanje članka u bazi
+
     res.status(201).json(newArticle);
   } catch (err) {
-    //400 znaci da korisnik nije lepo uneo podatke
     res.status(400).json({ message: err.message });
   }
 });
