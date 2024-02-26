@@ -138,18 +138,18 @@ const Registracija = ({ toggleSignUp, handleTokenReg, handleNameReg }) => {
             className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
           />
           <input
-            type="text"
+            type="password"
             placeholder="Password"
             value={password}
             onChange={handlePassword}
-            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
+            className={`w-4/5 h-10 m-2 rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black ${password ? "text-xs" : "text-base"}`}
           />
           <input
-            type="text"
+            type="password"
             placeholder="Confirm Password"
             value={passwordConfirmation}
             onChange={handlePasswordConfiramtion}
-            className="w-4/5 h-10 m-2  rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black"
+            className={`w-4/5 h-10 m-2 rounded-2xl bg-gray-50 border-b-2 border-gray-600 outline-none text-black pl-4 hover:bg-gray-300 transition duration-500 ease-in-out hover:text-black ${passwordConfirmation ? "text-xs" : "text-base"}`}
           />
           {isError && (
             <p style={{ color: "red", textAlign: "center", margin: "0" }}>

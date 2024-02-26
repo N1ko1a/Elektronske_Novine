@@ -93,42 +93,49 @@ function NavBar({ handleNavPage, handleNavSearch }) {
     setChange(!change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "general");
+    navigate(`/`);
   };
   const buttonBiznis = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "business");
+    navigate(`/`);
   };
   const buttonZabava = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "entertainment");
+    navigate(`/`);
   };
   const buttonZdravlje = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "health");
+    navigate(`/`);
   };
   const buttonNauka = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "science");
+    navigate(`/`);
   };
   const buttonSport = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "sports");
+    navigate(`/`);
   };
   const buttonTehnologija = () => {
     setChange(!change);
     handleNavPage(change);
     window.localStorage.setItem("Trenutna_strana", 0);
     window.localStorage.setItem("Rublika", "technology");
+    navigate(`/`);
   };
 
   return (
