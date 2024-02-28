@@ -63,21 +63,25 @@ router.post("/", async (req, res) => {
   try {
     const newUser = await user.save();
     const token = jwt.sign({ userId: newUser._id }, process.env.MY_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1m",
     });
     // Postavljanje HTTP-only kolačića
-    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, //mora da bude stranica https
+      maxAge: 3600000,
+    });
     // Slanje informacije o dostupnosti tokena u JSON odgovoru
-    console.log(isAdmin);
     res.json({
       authenticated: true,
       message: "uspesan token poslat",
       tokenAvailable: true,
       userName: newUser.FirstName,
-      isAdmin,
+      isAdmin: newUser.isAdmin,
+      _id: newUser._id,
     });
   } catch (err) {
-    res.status(400).json({ message: err.message, tokenAvailable: false });
+    res.status(500).json({ message: err.message, tokenAvailable: false });
   }
 });
 

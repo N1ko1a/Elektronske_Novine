@@ -7,7 +7,8 @@ const jwtMid = require("../middlewarw/authenticated");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/home/nikola/Nikola/github/Elektronske_Novine/api/uploads/");
+    // cb(null, "/home/nikola/Nikola/github/Elektronske_Novine/api/uploads/");
+    cb(null, "/api/uploads/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -352,5 +353,23 @@ async function getArticles(req, res, next) {
   res.article = article;
   next(); //nastavi dalje odakle si stao
 }
-
+// router.post("/approve-all", async (req, res) => {
+//   try {
+//     const articlesWithFalseApproval = await Article.find({ approved: true });
+//     console.log(articlesWithFalseApproval);
+//     const updateResult = await Article.updateMany(
+//       { approved: false },
+//       { $set: { approved: true } },
+//     );
+//
+//     // Provera da li je bilo promena
+//     if (updateResult.nModified > 0) {
+//       res.json({ message: "Successfully updated all articles to approved." });
+//     } else {
+//       res.json({ message: "No articles found with status 'false'." });
+//     }
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 module.exports = router;

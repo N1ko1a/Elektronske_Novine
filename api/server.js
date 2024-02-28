@@ -11,7 +11,7 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => {
   console.log("Connected to Database");
-  // dataSync.syncDataToDatabase();
+  dataSync.syncDataToDatabase();
   // dataSync.updateContentFromApi();
 });
 
@@ -21,7 +21,10 @@ app.use(cookieParser());
 // Enable CORS for all routes
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173", // Assuming frontend runs on port 5173
+      "http://nginx-c:9999", // Assuming Nginx runs on port 9999
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     preflightContinue: false,
@@ -38,4 +41,9 @@ app.use("/news", newsRoutes);
 const userRoutes = require("./routes/users");
 app.use("/user", userRoutes);
 
-app.listen(3000, () => console.log("Server started"));
+app.get("/", (req, res) => {
+  const headers = req.headers;
+  res.status(200).send(headers);
+});
+
+app.listen(process.env.SERVER_PORT, () => console.log("Server started"));

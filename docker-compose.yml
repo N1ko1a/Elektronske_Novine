@@ -1,0 +1,37 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - /home/nikola/Desktop/Elektronske_Novine:/app
+
+  server:
+    image: server
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: ${SERVER_HOST}
+    env_file: .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - mongo
+  nginx:
+    image: reverse-proxy
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: ${NGINX_HOST}
+    env_file: .env
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
