@@ -1,25 +1,29 @@
-# Opis projekta
+# Elektronske novine: Full Stack Web Application for Reading News
 
-Full stack web aplikacija za portal elektronskih novina.
-Funkcionalni zahtevi:
-- Korisinici na portalu mogu da citaju vesti (prvo se prikazuju aktuelne vesti ali dostupna je i arhiva koja moze da se pretrazi)
-- Vestu su definisane naslovom i tekstom (tekst moze da sadrzi slike, video linkove..). Svaki clanak pripada tacno jednoj rublici(politika, sport,tehnologija ...)
-- Vest je moguce pretraziti po naslovu 
-- Korisinik moze da lajkuje vest (like, dislike), moze da komentarise. Za ove akcije nije potrebna nikakva prijava, vec korisnik moze da unese jednokrato ime da postavi komentar. Takodje mozemo komentar da lajkujemo ili dislajkujemo. Takodje prikazujemo broj lajkova i dislajkova komentara i vesti.
+## Project Description
 
-Trenutno u izradi:
-Da bi neko postavio vest potrebno je da bude registrovan:
-- Novinar: moze da kreira novu vest u okviru neke rublike. Jednom kada je vest napisana cuva se u draftu. Dokle god je u ovo stanju novinar moze da je izmeni ili obrise. Kada zavrsi sa pisanjem salje je uredniku na pregled. I kada je posalje moze da je izmeni ili obrise. Kada urednik odobri tu vest novinar ne moze vise da pristupi promenama ili brisanju te vesti. Da bih novinar menjao nesto ili obrisao vest mora da trazi dozvolu od urednika. Novinar na registraciji bira kojoj ce rublici da pripada.
-- Urednik: moze biti nadleza za jednu ili vise rublika ili moze da bude glavni urednik. Urednik rublike moze da odobri i brise samo clanke iz te rublike dok glavni urednik moze da radi sve.
-- Glavni urednik moze da izmeni inforamcije novinara tjs kojoj rublici pripada, takodje moze da pretvori novinara u urednika neke rublike.
+Elektronske novine allows users to read news from various fields such as politics, sports, technology, and others. Users have access to current news as well as searching the news archive by title and categories. Each article has a defined title, text, and belongs to a specific category. Additionally, users can like and comment on news articles, with the ability to like or dislike comments, as well as track the number of likes and dislikes.
 
-Tehnologije koje cu koristiti:
+## Features
 
-- Front-End: React, Tailwind CSS
-- Back-End: Node js (Express)
-- Podaci: mongoDB (mongoose)
+- **Browsing News:** All visitors can read articles without the need to log in.
+- **Commenting:** All visitors can leave comments on articles, while logging in is required for liking comments and articles.
+- **Search:** Search by article title and genre is enabled for easier finding of interesting content.
+- **Adding Articles:** Registered users can add new articles to the platform. The article is filled out through a form with information about the title, description, image, genre, and author, after which it is submitted for approval.
+- **Authorization and Authentication:** We use JWT (JSON Web Token) for user authorization and authentication. The token is sent as an HTTPOnly cookie, while information about the current page and genre is stored in local storage to allow users to stay on the same page after refreshing.
 
-Trenutni izgle stranice: 
-<img src = "./src/assets/jedan.png" width = 1000 hight = 900>
-<img src = "./src/assets/dva.png" width = 1000 hight = 900>
-<img src = "./src/assets/tri.png" width = 1000 hight = 900>
+## Technical Stack
+
+- **Frontend Technologies:** React, Tailwind CSS, Framer Motion
+- **Backend Technologies:** Express.js
+- **Database:** MongoDB
+- **Docker:** Docker-compose
+
+## Running the Application
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/N1ko1a/Elektronske_Novine.git
+   cd Elektronske_Novine
+   sudo docker-compose up -d --build
