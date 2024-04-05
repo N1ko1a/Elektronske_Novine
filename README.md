@@ -19,11 +19,3 @@ Elektronske novine allows users to read news from various fields such as politic
 - **Database:** MongoDB
 - **Docker:** Docker-compose
 
-## Running the Application
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/N1ko1a/Elektronske_Novine.git
-   cd Elektronske_Novine
-   sudo docker-compose up -d --build
