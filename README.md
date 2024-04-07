@@ -6,8 +6,9 @@ Elektronske novine allows users to read news from various fields such as politic
 
 You can see FULL VIDEO PREVIEW in files named WebSitePreview.webm.
 
-[QuickVideoPreview.webm](https://github.com/N1ko1a/Elektronske_Novine/assets/85966654/8b513314-f34b-4849-9f7b-1ee244e82cea)
+[QuickVideoPreview1.webm](https://github.com/N1ko1a/Elektronske_Novine/assets/85966654/2c29e0c2-491f-4942-a05d-4999bcd56c5a)
 
+[QuickVideoPeview2.webm](https://github.com/N1ko1a/Elektronske_Novine/assets/85966654/02acba2f-ee14-4b23-a371-9c9be7f229f3)
 
 ## Features
 
