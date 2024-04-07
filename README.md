@@ -4,7 +4,7 @@
 
 Elektronske novine allows users to read news from various fields such as politics, sports, technology, and others. Users have access to current news as well as searching the news archive by title and categories. Each article has a defined title, text, and belongs to a specific category. Additionally, users can like and comment on news articles, with the ability to like or dislike comments, as well as track the number of likes and dislikes.
 
-You can see FULL VIDEO PREVIEW video in files named WebSitePreview.webm.
+You can see FULL VIDEO PREVIEW in files named WebSitePreview.webm.
 
 [QuickVideoPreview.webm](https://github.com/N1ko1a/Elektronske_Novine/assets/85966654/8b513314-f34b-4849-9f7b-1ee244e82cea)
 
